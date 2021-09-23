@@ -1,0 +1,7 @@
+usage: find_books s | a b
+	s: string with characters in the books' titles (case sensitive)
+	a: begin year (inclusive)
+	b: end year (inclusive)
+
+usage: find_authors s
+	s: string with characters in the authors' names (case sensitive)
