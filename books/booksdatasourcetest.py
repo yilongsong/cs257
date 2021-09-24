@@ -29,6 +29,10 @@ Functions to test:
     (5 tests)
 '''
 
+'''
+python3 booksdatasource.py
+'''
+
 import booksdatasource
 import unittest
 

@@ -1,7 +1,37 @@
-usage: find_books s | a b
-	s: string with characters in the books' titles (case sensitive)
-	a: begin year (inclusive)
-	b: end year (inclusive)
+books.py Usage Manual
+	
+Yilong Song, Rodrick Lankford
 
-usage: find_authors s
-	s: string with characters in the authors' names (case sensitive)
+Name
+      python3 books.py
+
+SYNOPSIS
+      python3 books.py -a search_text aspect
+      python3 books.py -b search_text aspect [sorted_by]
+      python3 books.py -y begin_year end_year aspect
+      python3 books.py -h
+
+DESCRIPTION
+      A program that finds and displays information about books or authors as specified.
+
+	-a, --author	Given search_text s and aspect a, finds and displays information 
+			(specified by a) about authors whose name contains s (case insensitive)
+			sorted by surname.
+			Options for aspect: surname, given_name, birth_year, death_year.
+
+	-b, --book	Given search_text s and aspect a, finds and displays information
+			(specified by a) about books whose whose titles contains s
+			(case insensitive), sorted by title by default or publication year if
+			specified with third argument [sorted_by].
+			Options for aspect: title, publication_year, authors.
+			Options for sorted_by: title, year.
+
+	-y, --year	Given begin_year a, end_year b and aspect a, finds and displays
+			informations about books whose publication year y is such that a <= y
+			<= b (y <= b only if a is None; a <= y only if b is None; a <= y only
+			if only one argument is given).
+			Options for aspect: title, publication_year, authors.
+	
+	-h, --help	Displays books.py Usage Manual.
+
+	An error would be raised if the user does not follow what is described above strictly.
