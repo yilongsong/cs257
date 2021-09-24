@@ -2,10 +2,10 @@
 Name:
     books.py - program that prints information about books 
 Synopsis:
-    books.py [-s] [-t] [-a] 
-    books.py [-t] 
-    books.py [-a]
-    books.py [-y] [-y] [-s]
+    python3 books.py [-s] [-t] [-a] 
+    python3 books.py [-t] 
+    python3 books.py [-a]
+    python3 books.py [-y] [-y] [-s]
 Description:
     -y, --year
         prints book titles that were realesed in the year provided 
@@ -16,5 +16,5 @@ Description:
     -s, --sort
         choose whether to sort by increasing or decreasing order.
     
-    The user has the option of chosing which specifications they want to include in their search. For example, they can say books.py -s increasing -t fly's -a Hemingway, or simply 
-  books.py -t fly's -a Hemingway. However, if the user wishes to get book titles realesd in a specific year they must specify the range of years. This means the synatax has to follow books.py -y year1 -y year2, and will default to printing the years by least to greatest.       
+    The user has the option of chosing which specifications they want to include in their search. For example, they can say pyton3 books.py -s increasing -t fly's -a Hemingway, or simply 
+  python3 books.py -t fly's -a Hemingway. However, if the user wishes to get book titles realesd in a specific year they must specify the range of years. This means the synatax has to follow python3 books.py -y year1 -y year2, and will default to printing the years by least to greatest.       
