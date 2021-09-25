@@ -14,10 +14,8 @@ Functions to test:
     Features to check:
         - search_text=None test
         - general test
-        - sort_by tests
-            - 'year'
-            - 'title'
-            - default (same as 'title')
+        - case test
+        - sort_by = 'year' test
     (5 tests)
 3) books_between_years(self, start_year=None, end_year=None)
     Features to check:
@@ -29,9 +27,6 @@ Functions to test:
     (5 tests)
 '''
 
-'''
-python3 booksdatasource.py
-'''
 
 import booksdatasource
 import unittest
@@ -75,4 +70,33 @@ class BooksDataSourceTester(unittest.TestCase):
     #Test for books
     def test_books_none(self):
         res1 = self.books_data_source.books()
-        res2 = self.books_data_source.books()
+        res2 = self.books_data_source.books(search_text=None, sort_by='abcd')
+        bookTitleList = ["All Clear", "Blackout", "Elmer Gantry", "Jane Eyre", "Main Street", "Murder on the Orient Express","The Life and Opinions of Tristram Shandy, Gentleman", "The Tenant of Wildfell Hall", "There, There", "Villette"]
+        
+        for i in range(len(res)):
+            assertEqual(res1[i].title, bookTitleList[i])
+            assertEqual(res2[i].title, bookTitleList[i])
+            
+    def test_books_general(self):
+        res = self.books_data_source.books(search_text = 'th')
+        bookTitleList = ["The Life and Opinions of Tristram Shandy, Gentleman", "The Tenant of Wildfell Hall", "There, There"]
+        
+        for i in range(len(res)):
+            assertEqual(res[i].title, bookTitleList[i])
+            
+    def test_books_case(self):
+        res = self.books_data_source.books(search_text = 'TH')
+        bookTitleList = ["The Life and Opinions of Tristram Shandy, Gentleman", "The Tenant of Wildfell Hall", "There, There"]
+        
+        for i in range(len(res)):
+            assertEqual(res[i].title, bookTitleList[i])
+        
+    def test_books_year(self):
+        res = self.books_data_source.books(search_text=None, sort_by='year')
+        bookTitleList = ["The Life and Opinions of Tristram Shandy, Gentleman", "Jane Eyre", "The Tenant of Wildfell Hall", "Villette", "Main Street", "Elmer Gantry", "Murder on the Orient Express", "Blackout", "There, There"]
+        
+        for i in range(len(res)):
+            assertEqual(res[i].title, bookTitleList[i])
+            
+    #Test for books_between_years
+        
