@@ -13,17 +13,16 @@ Functions to test:
 2) books(self, search_text=None, sort_by='title')
     Features to check:
         - search_text=None test
-        - general test
+        - general test (combined with former)
         - case test
         - sort_by = 'year' test
-    (5 tests)
+    (4 tests)
 3) books_between_years(self, start_year=None, end_year=None)
     Features to check:
         - None for both test
         - general test
         - start_year = None test
         - end_year = None test
-        - sorted by publication year, breaking ties by title
     (5 tests)
 '''
 
@@ -93,10 +92,36 @@ class BooksDataSourceTester(unittest.TestCase):
         
     def test_books_year(self):
         res = self.books_data_source.books(search_text=None, sort_by='year')
-        bookTitleList = ["The Life and Opinions of Tristram Shandy, Gentleman", "Jane Eyre", "The Tenant of Wildfell Hall", "Villette", "Main Street", "Elmer Gantry", "Murder on the Orient Express", "Blackout", "There, There"]
+        bookTitleList = ["The Life and Opinions of Tristram Shandy, Gentleman", "Jane Eyre", "The Tenant of Wildfell Hall", "Villette", "Main Street", "Elmer Gantry", "Murder on the Orient Express", "All Clear", "Blackout", "There, There"]
         
         for i in range(len(res)):
             assertEqual(res[i].title, bookTitleList[i])
             
     #Test for books_between_years
+    def test_books_between_years_both_none(self):
+        res = self.books_data_source.books_between_years(start_year=None, end_year=None)
+        bookTitleList = ["The Life and Opinions of Tristram Shandy, Gentleman", "Jane Eyre", "The Tenant of Wildfell Hall", "Villette", "Main Street", "Elmer Gantry", "Murder on the Orient Express", "All Clear", "Blackout", "There, There"]
         
+        for i in range(len(res)):
+            assertEqual(res[i].title, bookTitleList[i])
+    
+    def test_books_between_years_general(self):
+        res = self.books_data_source.books_between_years(start_year=1920, end_year = 1940)
+        bookTitleList = ["Main Street", "Elmer Gantry", "Murder on the Orient Express"]
+        
+        for i in range(len(res)):
+            assertEqual(res[i].title, bookTitleList[i])
+            
+    def test_books_between_years_start_year_none(self):
+        res = self.books_data_source.books_between_years(start_year=None, end_year=1900)
+        bookTitleList = ["The Life and Opinions of Tristram Shandy, Gentleman", "Jane Eyre", "The Tenant of Wildfell Hall", "Villette"]
+        
+        for i in range(len(res)):
+            assertEqual(res[i].title, bookTitleList[i])
+            
+    def test_books_between_years_end_year_none(self):
+        res = self.books_data_source.books_between_years(start_year=1900, end_year=None)
+        bookTitleList = ["Main Street", "Elmer Gantry", "Murder on the Orient Express", "All Clear", "Blackout", "There, There"]
+        
+        for i in range(len(res)):
+            assertEqual(res[i].title, bookTitleList[i])
