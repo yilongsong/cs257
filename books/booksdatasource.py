@@ -5,6 +5,8 @@
 
     For use in the "books" assignment at the beginning of Carleton's
     CS 257 Software Design class, Fall 2021.
+    
+    Four Functions implemented by Yilong Song and Rodrick Lankford
 '''
 
 import csv
@@ -42,10 +44,10 @@ class BooksDataSource:
         self.books = []
         self.authors = []
         
-        file = open(books_csv_file_name)
-        reader = csv.reader(csv_file)
-        for row in reader:
-            book_info = row.replace(" (", ",").replace(")", "").replace("-", ",")
+        file = open(books_csv_file_name, 'r')
+        reader = file.readlines()
+        for line in reader:
+            book_info = line.replace(" (", ",").replace(")", "").replace("-", ",").replace("\n",'')
             
             if book_info[0] == '\"':
                 list1 = book_info.split('"')
@@ -114,3 +116,9 @@ class BooksDataSource:
         '''
         return []
 
+
+def main():
+    test = BooksDataSource('books1.csv')
+    
+if __name__=='__main__':
+    main()
