@@ -10,7 +10,7 @@
 '''
 
 import csv
-
+from operator import itemgetter, attrgetter
 class Author:
     def __init__(self, surname='', given_name='', birth_year=None, death_year=None):
         self.surname = surname
@@ -25,7 +25,8 @@ class Book:
         self.title = title
         self.publication_year = publication_year
         self.authors = authors
-
+#Alist = []
+books = []
 class BooksDataSource:
     def __init__(self, books_csv_file_name):
         ''' The books CSV file format looks like this:
@@ -41,45 +42,58 @@ class BooksDataSource:
             suitable instance variables for the BooksDataSource object containing
             a collection of Author objects and a collection of Book objects.
         '''
-        self.books = []
-        self.authors = []
+        #need to account for the casses of two first names or two last names
         
-        file = open(books_csv_file_name, 'r')
-        reader = file.readlines()
-        for line in reader:
-            book_info = line.replace(" (", ",").replace(")", "").replace("-", ",").replace("\n",'')
-            
-            if book_info[0] == '\"':
-                list1 = book_info.split('"')
-                list2 = list1[2].split(",")
-                book_info_list = []
-                book_info_list.append(list1[1])
-                book_info_list.append(list2[1])
-                book_info_list.append(list2[2])
-                book_info_list.append(list2[3])
-                book_info_list.append(list2[4])
-            else:
-                book_info_list = book_info.split(",")
-            
-            print(book_info_list) #for debugging purposes
-            
-            name = book_info_list[2]
-            name_list = name.split(" ")
-            
-            if (book_info_list[-1]) == '':
-                book_info_list[-1] = None
-            
-            authors = Author(name_list[0], name_list[-1], book_info_list[3], book_info_list[4])
-            
-            book = Book(book_info_list[0], book_info_list[1], [authors])
-            
-            for i in range(len(self.authors)): #check if author already exists in collection
-                if (authors.surname == self.authors[i].surname and authors.given_name == self.authors[i].given_name):
-                    break
-                if i == len(self.authors)-1:
-                    self.authors.append(author)
-            self.books.append(book)
-            
+        with open(books_csv_file_name) as csv_file:
+            read = csv.reader(csv_file, delimiter=',')
+            for line in read:
+                alist = []
+                aInfo = line[2].split(' ')
+                
+                surname = aInfo[1]
+                given_name = aInfo[0]
+                birth_info = (aInfo[2].replace("(","").replace(")","").replace("-"," ")).split(' ')
+                birth_year = birth_info[0]
+                if 'and' in line[2]:
+                    surname2 = aInfo[5]
+                    given_name2 = aInfo[4]
+                    birth_info2 = (aInfo[6].replace("(","").replace(")","").replace("-"," ")).split(' ')
+                    birth_year2 = birth_info2[0]
+                    #not needed
+                    if len(birth_info2) < 2:
+                        death_year2 = None
+                    else:
+                        death_year2 = birth_info2[1]
+                    author2 = Author(surname=surname2,given_name=given_name2,birth_year=birth_year2,death_year=death_year2)
+                    alist.append(author2)
+                book_title = line[0]
+                book_year = line[1]
+                #not needed
+                if len(birth_info) < 2:
+                    death_year = None
+                else:
+                    death_year = birth_info[1]
+                author1 = Author(surname=surname,given_name=given_name,birth_year=birth_year,death_year=death_year)
+                alist.append(author1)
+                #author2 = Author(surname=surname2,given_name=given_name2,birth_year=birth_year2,death_year=death_year2)
+                #alist.append(author2)
+
+                book = Book(title=book_title,publication_year=book_year,authors=alist)
+                books.append(book)
+                
+                
+        #pass
+    #need to make a sort function
+    def ysort(self, sort=''):
+        # author_objects = books.authors
+        # sorted(author_objects, key=attrgetter('surname'))
+
+
+        #if sort == "year":
+        sorted(books,key=attrgetter("publication_year"))
+
+        return []
+        
 
     def authors(self, search_text=None):
         ''' Returns a list of all the Author objects in this data source whose names contain
@@ -87,11 +101,26 @@ class BooksDataSource:
             returns all of the Author objects. In either case, the returned list is sorted
             by surname, breaking ties using given name (e.g. Ann Brontë comes before Charlotte Brontë).
         '''
-        return []
+        Alist = []
+        #for ath in books:
+            #print(ath.authors[0].surname)
+        #self.sort("name")
+        search_text = "Haruki"
+        for bk in books:
+            for ath in bk.authors:
+                if (search_text == ath.surname) | (search_text == ath.given_name):
+                    Alist.append(ath)
+                    num = ath.birth_year
+                    
+                if (search_text == None):
+                    Alist.append(ath)
+        sorted(Alist,key=attrgetter("surname","given_name"))
+        
+        return Alist
 
     def books(self, search_text=None, sort_by='title'):
         ''' Returns a list of all the Book objects in this data source whose
-            titles contain (case-insensitively) search_text. If search_text is None,
+            titles contain (.case-insensitively) search_text. If search_text is None,
             then this method returns all of the books objects.
 
             The list of books is sorted in an order depending on the sort_by parameter:
@@ -115,10 +144,24 @@ class BooksDataSource:
             should be included.
         '''
         return []
+<<<<<<< HEAD
 
 
 def main():
     test = BooksDataSource('books1.csv')
     
 if __name__=='__main__':
+=======
+#for minor test
+def main():
+    b = BooksDataSource("book1.csv")
+    b.authors()
+    
+    # arguments = parse_command_line()
+    # if len(sys.argv) == 2:
+    #     arguments('person-name') =sys.argv[1]
+    # else:
+    #     main(arguments)
+if __name__ == "__main__":
+>>>>>>> ae547bae36d79a4f5082bb60f80c2233cea91886
     main()
