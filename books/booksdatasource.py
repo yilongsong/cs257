@@ -39,7 +39,45 @@ class BooksDataSource:
             suitable instance variables for the BooksDataSource object containing
             a collection of Author objects and a collection of Book objects.
         '''
-        pass
+        self.books = []
+        self.authors = []
+        
+        file = open(books_csv_file_name)
+        reader = csv.reader(csv_file)
+        for row in reader:
+            book_info = row.replace(" (", ",").replace(")", "").replace("-", ",")
+            
+            if book_info[0] == '\"':
+                list1 = book_info.split('"')
+                list2 = list1[2].split(",")
+                book_info_list = []
+                book_info_list.append(list1[1])
+                book_info_list.append(list2[1])
+                book_info_list.append(list2[2])
+                book_info_list.append(list2[3])
+                book_info_list.append(list2[4])
+            else:
+                book_info_list = book_info.split(",")
+            
+            print(book_info_list) #for debugging purposes
+            
+            name = book_info_list[2]
+            name_list = name.split(" ")
+            
+            if (book_info_list[-1]) == '':
+                book_info_list[-1] = None
+            
+            authors = Author(name_list[0], name_list[-1], book_info_list[3], book_info_list[4])
+            
+            book = Book(book_info_list[0], book_info_list[1], [authors])
+            
+            for i in range(len(self.authors)): #check if author already exists in collection
+                if (authors.surname == self.authors[i].surname and authors.given_name == self.authors[i].given_name):
+                    break
+                if i == len(self.authors)-1:
+                    self.authors.append(author)
+            self.books.append(book)
+            
 
     def authors(self, search_text=None):
         ''' Returns a list of all the Author objects in this data source whose names contain
