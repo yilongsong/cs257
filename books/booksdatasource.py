@@ -1,8 +1,6 @@
-#!/usr/bin/env python3
 '''
     booksdatasource.py
     Jeff Ondich, 21 September 2021
-
     For use in the "books" assignment at the beginning of Carleton's
     CS 257 Software Design class, Fall 2021.
     
@@ -10,7 +8,7 @@
 '''
 
 import csv
-from operator import itemgetter, attrgetter
+
 class Author:
     def __init__(self, surname='', given_name='', birth_year=None, death_year=None):
         self.surname = surname
@@ -25,75 +23,68 @@ class Book:
         self.title = title
         self.publication_year = publication_year
         self.authors = authors
-#Alist = []
-books = []
+
 class BooksDataSource:
     def __init__(self, books_csv_file_name):
         ''' The books CSV file format looks like this:
-
                 title,publication_year,author_description
-
             For example:
-
                 All Clear,2010,Connie Willis (1945-)
                 "Right Ho, Jeeves",1934,Pelham Grenville Wodehouse (1881-1975)
-
             This __init__ method parses the specified CSV file and creates
             suitable instance variables for the BooksDataSource object containing
             a collection of Author objects and a collection of Book objects.
         '''
-        #need to account for the casses of two first names or two last names
+        self.books_collection = []
+        self.authors_collection = []
         
-        with open(books_csv_file_name) as csv_file:
-            read = csv.reader(csv_file, delimiter=',')
-            for line in read:
-                alist = []
-                aInfo = line[2].split(' ')
-                
-                surname = aInfo[1]
-                given_name = aInfo[0]
-                birth_info = (aInfo[2].replace("(","").replace(")","").replace("-"," ")).split(' ')
-                birth_year = birth_info[0]
-                if 'and' in line[2]:
-                    surname2 = aInfo[5]
-                    given_name2 = aInfo[4]
-                    birth_info2 = (aInfo[6].replace("(","").replace(")","").replace("-"," ")).split(' ')
-                    birth_year2 = birth_info2[0]
-                    #not needed
-                    if len(birth_info2) < 2:
-                        death_year2 = None
-                    else:
-                        death_year2 = birth_info2[1]
-                    author2 = Author(surname=surname2,given_name=given_name2,birth_year=birth_year2,death_year=death_year2)
-                    alist.append(author2)
-                book_title = line[0]
-                book_year = line[1]
-                #not needed
-                if len(birth_info) < 2:
-                    death_year = None
+        file = open(books_csv_file_name, 'r')
+        reader = csv.reader(file)
+        for row in reader:
+            # for construction of each book object
+            book_title = row[0]
+            book_publication_year = int(row[1])
+            authors_list = []
+            
+            # for construction of each author object
+            author_info = row[2].replace(" (", ",").replace(")", "").replace("-", ",").replace("\n",'').replace(' and ', ',')
+            author_info_list = author_info.split(",")
+            
+            #for each author of the book
+            n = 0
+            for i in range(len(author_info_list)//3):
+                author_name = author_info_list[n]
+                author_birth_year = int(author_info_list[n+1])
+                author_death_year = author_info_list[n+2]
+                if author_death_year == '':
+                    author_death_year = None
                 else:
-                    death_year = birth_info[1]
-                author1 = Author(surname=surname,given_name=given_name,birth_year=birth_year,death_year=death_year)
-                alist.append(author1)
-                #author2 = Author(surname=surname2,given_name=given_name2,birth_year=birth_year2,death_year=death_year2)
-                #alist.append(author2)
-
-                book = Book(title=book_title,publication_year=book_year,authors=alist)
-                books.append(book)
+                    author_death_year = int(author_death_year)
+                    
+                #author must have a none void birth year
+                 
+                author_name_list = author_name.split(" ")
+                author_given_name = author_name_list[0]
+                author_surname = author_name_list[-1]
                 
+                author = Author(surname=author_surname, given_name=author_given_name, birth_year=author_birth_year, death_year=author_death_year)
                 
-        #pass
-    #need to make a sort function
-    def ysort(self, sort=''):
-        # author_objects = books.authors
-        # sorted(author_objects, key=attrgetter('surname'))
+                if len(self.authors_collection)==0:
+                    self.authors_collection.append(author)
+                    
+                for j in range(len(self.authors_collection)): #check if author already exists in collection
+                    if (author.surname == self.authors_collection[j].surname and author.given_name == self.authors_collection[j].given_name):
+                        break
+                    if j == len(self.authors_collection)-1:
+                        self.authors_collection.append(author)
+                
+                authors_list.append(author)
 
-
-        #if sort == "year":
-        sorted(books,key=attrgetter("publication_year"))
-
-        return []
-        
+                n+=3
+                
+            # finish constructing each book object
+            book = Book(title = book_title, publication_year=book_publication_year, authors=authors_list)
+            self.books_collection.append(book)
 
     def authors(self, search_text=None):
         ''' Returns a list of all the Author objects in this data source whose names contain
@@ -101,67 +92,74 @@ class BooksDataSource:
             returns all of the Author objects. In either case, the returned list is sorted
             by surname, breaking ties using given name (e.g. Ann Brontë comes before Charlotte Brontë).
         '''
-        Alist = []
-        #for ath in books:
-            #print(ath.authors[0].surname)
-        #self.sort("name")
-        search_text = "Haruki"
-        for bk in books:
-            for ath in bk.authors:
-                if (search_text == ath.surname) | (search_text == ath.given_name):
-                    Alist.append(ath)
-                    num = ath.birth_year
-                    
-                if (search_text == None):
-                    Alist.append(ath)
-        sorted(Alist,key=attrgetter("surname","given_name"))
+        res = []
         
-        return Alist
+        for author in self.authors_collection:
+            if search_text==None or (search_text.lower() in author.surname.lower()) or (search_text.lower() in author.given_name.lower()):
+                res.append(author)
+            
+        res.sort(key=lambda x: (x.surname, x.given_name))
+        
+        return res
 
     def books(self, search_text=None, sort_by='title'):
         ''' Returns a list of all the Book objects in this data source whose
-            titles contain (.case-insensitively) search_text. If search_text is None,
+            titles contain (case-insensitively) search_text. If search_text is None,
             then this method returns all of the books objects.
-
             The list of books is sorted in an order depending on the sort_by parameter:
-
                 'year' -- sorts by publication_year, breaking ties with (case-insenstive) title
                 'title' -- sorts by (case-insensitive) title, breaking ties with publication_year
                 default -- same as 'title' (that is, if sort_by is anything other than 'year'
                             or 'title', just do the same thing you would do for 'title')
         '''
-        return []
+        res = []
+        
+        for book in self.books_collection:
+            if search_text==None or (search_text.lower() in book.title.lower()):
+                res.append(book)
+        
+        if sort_by=='year':
+            res.sort(key=lambda x: (x.publication_year, x.title))
+        else:
+            res.sort(key=lambda x: (x.title, x.publication_year))
+        
+        return res
 
     def books_between_years(self, start_year=None, end_year=None):
         ''' Returns a list of all the Book objects in this data source whose publication
             years are between start_year and end_year, inclusive. The list is sorted
             by publication year, breaking ties by title (e.g. Neverwhere 1996 should
             come before Thief of Time 1996).
-
             If start_year is None, then any book published before or during end_year
             should be included. If end_year is None, then any book published after or
             during start_year should be included. If both are None, then all books
             should be included.
         '''
-        return []
-<<<<<<< HEAD
+        res = []
+        
+        for book in self.books_collection:
+            if start_year==None and end_year==None:
+                res.append(book)
+            elif start_year==None:
+                if book.publication_year <= end_year:
+                    res.append(book)
+            elif end_year==None:
+                if book.publication_year >= start_year:
+                    res.append(book)
+            else:
+                if book.publication_year >= start_year and book.publication_year <= end_year:
+                    res.append(book)
+        
+        res.sort(key=lambda x: (x.publication_year, x.title))
+        
+        return res
 
 
 def main():
-    test = BooksDataSource('books1.csv')
+    test = BooksDataSource('test.csv')
+    testauthorlist = test.books(search_text='TH')
+    for item in testauthorlist:
+        print(item.title)
     
 if __name__=='__main__':
-=======
-#for minor test
-def main():
-    b = BooksDataSource("book1.csv")
-    b.authors()
-    
-    # arguments = parse_command_line()
-    # if len(sys.argv) == 2:
-    #     arguments('person-name') =sys.argv[1]
-    # else:
-    #     main(arguments)
-if __name__ == "__main__":
->>>>>>> ae547bae36d79a4f5082bb60f80c2233cea91886
     main()

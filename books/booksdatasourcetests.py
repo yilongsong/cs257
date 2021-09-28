@@ -47,7 +47,7 @@ class BooksDataSourceTester(unittest.TestCase):
         authorGivennameList = ["Ann", "Charlotte", "Agatha", "Sinclair", "Tommy", "Laurence", "Connie"]
         authorSurnameList = ["Brontë", "Brontë", "Christie", "Lewis", "Orange", "Sterne", "Willis"]
         
-        self.assertEqual(len(authorGivennameList, res))
+        self.assertEqual(len(authorGivennameList),len(res))
         
         for i in range(len(authorGivennameList)):
             self.assertNotEqual(len(res), 0)
@@ -59,7 +59,7 @@ class BooksDataSourceTester(unittest.TestCase):
         authorGivennameList = ["Agatha", "Sinclair", "Connie"]
         authorSurnameList = ["Christie", "Lewis", "Willis"]
         
-        self.assertEqual(len(authorGivennameList, res))
+        self.assertEqual(len(authorGivennameList),len(res))
         
         for i in range(len(authorGivennameList)):
             self.assertNotEqual(len(res), 0)
@@ -71,7 +71,7 @@ class BooksDataSourceTester(unittest.TestCase):
         authorGivennameList = ["Ann", "Charlotte"]
         authorSurnameList = ["Brontë", "Brontë"]
         
-        self.assertEqual(len(authorGivennameList, res))
+        self.assertEqual(len(authorGivennameList),len(res))
         
         for i in range(len(authorGivennameList)):
             self.assertNotEqual(len(res), 0)
@@ -95,7 +95,7 @@ class BooksDataSourceTester(unittest.TestCase):
             
     def test_books_general(self):
         res = self.books_data_source.books(search_text = 'th')
-        bookTitleList = ["The Life and Opinions of Tristram Shandy, Gentleman", "The Tenant of Wildfell Hall", "There, There"]
+        bookTitleList = ["Murder on the Orient Express", "The Life and Opinions of Tristram Shandy, Gentleman", "The Tenant of Wildfell Hall", "There, There"]
         
         self.assertEqual(len(res), len(bookTitleList))
         
@@ -105,7 +105,7 @@ class BooksDataSourceTester(unittest.TestCase):
             
     def test_books_case(self):
         res = self.books_data_source.books(search_text = 'TH')
-        bookTitleList = ["The Life and Opinions of Tristram Shandy, Gentleman", "The Tenant of Wildfell Hall", "There, There"]
+        bookTitleList = ["Murder on the Orient Express", "The Life and Opinions of Tristram Shandy, Gentleman", "The Tenant of Wildfell Hall", "There, There"]
         
         self.assertEqual(len(res), len(bookTitleList))
         
