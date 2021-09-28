@@ -5,8 +5,6 @@
 
     For use in the "books" assignment at the beginning of Carleton's
     CS 257 Software Design class, Fall 2021.
-    
-    Four Functions implemented by Yilong Song and Rodrick Lankford
 '''
 
 import csv
@@ -26,9 +24,11 @@ class Book:
         self.publication_year = publication_year
         self.authors = authors
 #Alist = []
-books = []
+
 class BooksDataSource:
+    Books = []
     def __init__(self, books_csv_file_name):
+        
         ''' The books CSV file format looks like this:
 
                 title,publication_year,author_description
@@ -42,6 +42,7 @@ class BooksDataSource:
             suitable instance variables for the BooksDataSource object containing
             a collection of Author objects and a collection of Book objects.
         '''
+        
         #need to account for the casses of two first names or two last names
         
         with open(books_csv_file_name) as csv_file:
@@ -49,15 +50,24 @@ class BooksDataSource:
             for line in read:
                 alist = []
                 aInfo = line[2].split(' ')
-                
-                surname = aInfo[1]
                 given_name = aInfo[0]
-                birth_info = (aInfo[2].replace("(","").replace(")","").replace("-"," ")).split(' ')
-                birth_year = birth_info[0]
+                if (aInfo[2].isalpha()) & (aInfo[2] != 'and'):
+                    surname = aInfo[2]
+                    birth_info = (aInfo[3].replace("(","").replace(")","").replace("-"," ")).split(' ')
+                    birth_year = birth_info[0]
+                else:
+                    surname = aInfo[1]
+                    birth_info = (aInfo[2].replace("(","").replace(")","").replace("-"," ")).split(' ')
+                    birth_year = birth_info[0]
+                
+                
                 if 'and' in line[2]:
-                    surname2 = aInfo[5]
-                    given_name2 = aInfo[4]
-                    birth_info2 = (aInfo[6].replace("(","").replace(")","").replace("-"," ")).split(' ')
+                    surname2 = aInfo[-2]
+                    if (aInfo[-4] != 'and'):                        
+                        given_name2 = aInfo[-4]
+                    else:
+                        given_name2 = aInfo[-3]
+                    birth_info2 = (aInfo[-1].replace("(","").replace(")","").replace("-"," ")).split(' ')
                     birth_year2 = birth_info2[0]
                     #not needed
                     if len(birth_info2) < 2:
@@ -79,7 +89,7 @@ class BooksDataSource:
                 #alist.append(author2)
 
                 book = Book(title=book_title,publication_year=book_year,authors=alist)
-                books.append(book)
+                self.Books.append(book)
                 
                 
         #pass
@@ -90,7 +100,7 @@ class BooksDataSource:
 
 
         #if sort == "year":
-        sorted(books,key=attrgetter("publication_year"))
+        sorted(self.Books,key=attrgetter("publication_year"))
 
         return []
         
@@ -105,17 +115,20 @@ class BooksDataSource:
         #for ath in books:
             #print(ath.authors[0].surname)
         #self.sort("name")
-        search_text = "Haruki"
-        for bk in books:
+        #search_text = "Haruki"
+        
+        for bk in self.Books:
             for ath in bk.authors:
                 if (search_text == ath.surname) | (search_text == ath.given_name):
                     Alist.append(ath)
-                    num = ath.birth_year
-                    
+                             
                 if (search_text == None):
+                    #print(ath.surname)
                     Alist.append(ath)
-        sorted(Alist,key=attrgetter("surname","given_name"))
-        
+        #sorted(Alist,key=attrgetter("surname"))
+        Alist.sort(key=lambda x: (x.surname, x.given_name))
+        #print(Alist[0].surname  )
+
         return Alist
 
     def books(self, search_text=None, sort_by='title'):
@@ -130,7 +143,24 @@ class BooksDataSource:
                 default -- same as 'title' (that is, if sort_by is anything other than 'year'
                             or 'title', just do the same thing you would do for 'title')
         '''
-        return []
+        Blist = []
+        
+        for bk in self.Books:
+            t = bk.title
+            if (search_text in  bk.title):
+                Alist.append(bk)
+                            
+            if (search_text == None):
+                #print(ath.surname)
+                Alist.append(bk)
+        #sorted(Alist,key=attrgetter("surname"))
+        if (sort_by == 'title'):
+            Blist.sort(key=lambda x: (x.title))
+        if (sort_by == 'year'):
+            Blist.sort(key=lambda x: (x.year))
+        else:
+            Blist.sort(key=lambda x: (x.title))
+        return Blist
 
     def books_between_years(self, start_year=None, end_year=None):
         ''' Returns a list of all the Book objects in this data source whose publication
@@ -144,17 +174,10 @@ class BooksDataSource:
             should be included.
         '''
         return []
-<<<<<<< HEAD
-
-
-def main():
-    test = BooksDataSource('books1.csv')
-    
-if __name__=='__main__':
-=======
 #for minor test
 def main():
     b = BooksDataSource("book1.csv")
+
     b.authors()
     
     # arguments = parse_command_line()
@@ -163,5 +186,4 @@ def main():
     # else:
     #     main(arguments)
 if __name__ == "__main__":
->>>>>>> ae547bae36d79a4f5082bb60f80c2233cea91886
     main()
