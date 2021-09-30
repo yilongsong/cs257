@@ -41,4 +41,4 @@ DESCRIPTION
 
 	csv_file_name must be a string ending with ".csv".
 	An error would be raised if the user does not follow what is described above strictly.
-	To fix the formatting of this manual, horizontally expand terminal window until formatting appears normal.
+	To fix the layout of this manual, horizontally expand terminal window until layout appears normal.
