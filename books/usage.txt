@@ -6,32 +6,38 @@ Name
       python3 books.py
 
 SYNOPSIS
-      python3 books.py -a search_text aspect
-      python3 books.py -b search_text aspect [sorted_by]
-      python3 books.py -y begin_year end_year aspect
+      python3 books.py -a csv_file_name [search_text] [aspect1] [aspect2] [aspect3] [aspect4]
+      python3 books.py -b csv_file_name sorted_by [search_text] [aspect1] [aspect2] [aspect3]
+      python3 books.py -y csv_file_name begin_year end_year [aspect1] [aspect2] [aspect3]
       python3 books.py -h
 
 DESCRIPTION
       A program that finds and displays information about books or authors as specified.
 
-	-a, --author	Given search_text s and aspect a, finds and displays information 
-			(specified by a) about authors whose name contains s (case insensitive)
-			sorted by surname.
+	-a, --author	Given csv_file_name c, search_text s (optional) and aspects a1, a2, a3, a4 (optional), 
+			finds and displays information (specified by a1, ...) about authors whose name contains 
+			s (case insensitive) sorted by surname from csv file c.If no search_text is specified,
+			information of all authors in the given csv file c are displayed; if no aspect is
+			specified, all aspects of each author in c are displayed.
 			Options for aspect: surname, given_name, birth_year, death_year.
 
-	-b, --book	Given search_text s and aspect a, finds and displays information
-			(specified by a) about books whose whose titles contains s
-			(case insensitive), sorted by title by default or publication year if
-			specified with third argument [sorted_by].
-			Options for aspect: title, publication_year, authors.
+	-b, --book	Given csv_file_name c, search_text s (optional) and aspects a1, a2, a3 (optional),
+			finds and displays information (specified by a1, ...) about books whose titles contains
+			s (case insensitive) from csv file c, sorted by title by default or publication 
+			year if specified with third argument [sorted_by]. If no search_text is specified,
+			information of all books in the given csv file c are displayed; if no aspect is
+			specified, all aspects of each book in c are displayed.
 			Options for sorted_by: title, year.
+			Options for aspect: title, publication_year, authors.
 
-	-y, --year	Given begin_year a, end_year b and aspect a, finds and displays
-			informations about books whose publication year y is such that a <= y
-			<= b (y <= b only if a is None; a <= y only if b is None; a <= y only
-			if only one argument is given).
+	-y, --year	Given csv_file_name c, begin_year a, end_year b, and aspect a1, a2, a3 (optional), 
+			finds and displays informations about books from csv file c whose publication year y is 
+			such that a <= y <= b ('None' can be given in place of either a, b, or both; if a is 
+			'None', y <= b only; if b is 'None', a <= y only; if both are 'None', all books from c
+			are displayed).
 			Options for aspect: title, publication_year, authors.
 	
 	-h, --help	Displays books.py Usage Manual.
 
+	csv_file_name must be a string ending with ".csv".
 	An error would be raised if the user does not follow what is described above strictly.
