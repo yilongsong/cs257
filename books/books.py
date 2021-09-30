@@ -23,6 +23,12 @@ def main():
     args = sys.argv
     if len(args)<2 or len(args)>8:
         argsNumError()
+        
+    #['books.py', '-a', 'test.csv', 'search_text', 'aspect1', 'aspect2', 'aspect3', 'aspect4']
+
+    #
+    
+    #
     
     if len(args)!=2: #It cannot be -h so there must be a file name
         if args[2][-4:]!='.csv':
@@ -30,6 +36,7 @@ def main():
         csv_file_name = args[2]
         
     if args[1]=='-a' or args[1]=='--author':
+        search_text = None
         aspect = None
         if len(args)!=4:
             if len(args)==5:
@@ -60,6 +67,7 @@ def main():
             usageError()
         
     elif args[1]=='-b' or args[1]=='--books':
+        search_text = None
         aspect = None
         if len(args)!=5:
             if len(args)==6:
@@ -96,7 +104,11 @@ def main():
     elif args[1]=='-y' or args[1]=='--year':
         pass
     elif args[1]=='-h' or args[1]=='--help':
-        pass
+        file = open('usage.txt', 'r')
+        lines = file.readlines()
+        
+        for line in lines:
+            print(line)
     else:
         usageError()
     
