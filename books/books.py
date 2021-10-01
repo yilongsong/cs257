@@ -34,35 +34,84 @@ def main():
         if args[2][-4:]!='.csv':
             fileError()
         csv_file_name = args[2]
+        search_text = args[3]
         
     if args[1]=='-a' or args[1]=='--author':
-        search_text = None
-        aspect = None
-        if len(args)!=4:
-            if len(args)==5:
-                aspect = args[4]
-            else:
-                argsNumError()
+        aspect1='None'
+        aspect2='None'
+        aspect3='None'
+        if len(args)<4 or len(args)>7:
+            argsNumError()
+    
+        if len(args) >= 5:
+            aspect1 = args[4]
+        if len(args) >= 6:
+            aspect2 = args[5]
+        if len(args) == 7:
+            aspect3 = args[6]
             
         source = booksdatasource.BooksDataSource(csv_file_name)
         res = source.authors(search_text=search_text)
         
-        if aspect == None:
+        if aspect1 == 'None' and aspect2 == 'None' and aspect3 == 'None':
             for author in res:
-                s = 'Name: '+author.given_name+' '+author.surname+'  Birth: '+str(author.birth_year)+'  Death: '+str(author.death_year)
+                s = 'Given name: '+author.given_name+'  Surname: '+author.surname+'  Birth: '+str(author.birth_year)+'  Death: '+str(author.death_year)
                 print(s)
-        elif aspect == 'surname':
+        elif aspect1 in ['surname', 'None'] and aspect2 in ['surname', 'None'] and aspect3 in ['surname', 'None']:
             for author in res:
-                print(author.surname)
-        elif aspect == 'given_name':
+                print('Surname:', author.surname)
+        elif aspect1 in ['given_name', 'None'] and aspect2 in ['given_name', 'None'] and aspect3 in ['given_name', 'None']:
+                print('Given name:', author.given_name)
+        elif aspect1 in ['birth_year', 'None'] and aspect2 in ['birth_year', 'None'] and aspect3 in ['birth_year', 'None']:
             for author in res:
-                print(author.given_name)
-        elif aspect == 'birth_year':
-            for author in res:
-                print(author.birth_year)
-        elif aspect == 'death_year':
+                print('Birth:', author.birth_year)
+        elif aspect1 in ['death_year', 'None'] and aspect2 in ['death_year', 'None'] and aspect3 in ['death_year', 'None']:
             for author in res:
                 print(author.death_year)
+        elif aspect1 in ['surname', 'given_name', 'None'] and aspect2 in ['surname', 'given_name', 'None'] and aspect3 in ['surname', 'given_name', 'None']:
+            for author in res:
+                s = 'Given name: '+author.given_name+'  Surname: '+author.surname
+                print(s)
+        elif aspect1 in ['birth_year', 'surname', 'None'] and aspect2 in ['birth_year', 'surname', 'None'] and aspect3 in ['birth_year', 'surname', 'None']:
+            for author in res:
+                s = 'Surname: '+author.surname+'  Birth: '+str(author.birth_year)
+                print(s)
+        elif aspect1 in ['surname', 'death_year', 'None'] and aspect2 in ['surname', 'death_year', 'None'] and aspect3 in ['surname', 'death_year', 'None']:
+            for author in res:
+                s = 'Surname: '+author.surname+'  Death: '+str(author.death_year)
+                print(s)
+        elif aspect1 in ['birth_year', 'given_name', 'None'] and aspect2 in ['birth_year', 'given_name', 'None'] and aspect3 in ['birth_year', 'given_name', 'None']:
+            for author in res:
+                s = 'Given name: '+author.given_name+'  Birth: '+str(author.birth_year)
+                print(s)
+        elif aspect1 in ['death_year', 'given_name', 'None'] and aspect2 in ['death_year', 'given_name', 'None'] and aspect3 in ['death_year', 'given_name', 'None']:
+            for author in res:
+                s = 'Given name: '+author.given_name+'  Death: '+str(author.death_year)
+                print(s)
+        elif aspect1 in ['birth_year', 'death_year', 'None'] and aspect2 in ['birth_year', 'death_year', 'None'] and aspect3 in ['birth_year', 'death_year', 'None']:
+            for author in res:
+                s = 'Birth: '+str(author.birth_year)+'  Death: '+str(author.death_year)
+                print(s)
+        elif aspect1 in ['birth_year', 'given_name', 'surname', 'None'] and aspect2 in ['birth_year', 'given_name', 'surname', 'None'] and aspect3 in ['birth_year', 'given_name', 'surname', 'None']:
+            for author in res:
+                s = 'Surname: '+author.surname+'  Given name: '+author.given_name+'  Birth: '+str(author.birth_year)
+                print(s)
+        elif aspect1 in ['death_year', 'given_name', 'surname', 'None'] and aspect2 in ['death_year', 'given_name', 'surname', 'None'] and aspect3 in ['death_year', 'given_name', 'surname', 'None']:
+            for author in res:
+                s = 'Surname: '+author.surname+'  Given name: '+author.given_name+'  Death: '+str(author.death_year)
+                print(s)
+        elif aspect1 in ['birth_year', 'death_year', 'surname', 'None'] and aspect2 in ['birth_year', 'death_year', 'surname', 'None'] and aspect3 in ['birth_year', 'death_year', 'surname', 'None']:
+            for author in res:
+                s = 'Surname: '+author.surname+'  Birth: '+str(author.birth_year)+'  Death: '+str(author.death_year)
+                print(s)
+        elif aspect1 in ['birth_year', 'death_year', 'given_name', 'None'] and aspect2 in ['birth_year', 'death_year', 'given_name', 'None'] and aspect3 in ['birth_year', 'death_year', 'given_name', 'None']:
+            for author in res:
+                s = 'Given name: '+author.given_name+'  Birth: '+str(author.birth_year)+'  Death: '+str(author.death_year)
+                print(s)
+        elif aspect1 in ['birth_year', 'death_year', 'surname', 'given_name', 'None'] and aspect2 in ['birth_year', 'death_year', 'surname', 'given_name', 'None'] and aspect3 in ['birth_year', 'death_year', 'given_name', 'surname', 'None']:
+            for author in res:
+                s = 'Given name: '+author.given_name+'  Surname: '+author.surname+'  Birth: '+str(author.birth_year)+'  Death: '+str(author.death_year)
+                
         else:
             usageError()
         

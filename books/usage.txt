@@ -7,7 +7,7 @@ Name
 
 SYNOPSIS
       python3 books.py -a csv_file_name search_text [aspect1] [aspect2] [aspect3] [aspect4]
-      python3 books.py -b csv_file_name sorted_by search_text [aspect1] [aspect2] [aspect3]
+      python3 books.py -b csv_file_name search_text sorted_by [aspect1] [aspect2] [aspect3]
       python3 books.py -y csv_file_name begin_year end_year [aspect1] [aspect2] [aspect3]
       python3 books.py -h
 
@@ -16,7 +16,7 @@ DESCRIPTION
 
 	-a, --author	Given csv_file_name c, search_text s and aspects a1, a2, a3, a4 (optional), finds and
 			displays information (specified by a1, ...) about authors whose name contains s (case
-			insensitive) sorted by surname from csv file c.If in place of search_text 'None' is 
+			insensitive) sorted by surname from csv file c. If in place of search_text 'None' is 
 			given, information of all authors in the given csv file c are displayed; if no aspect is
 			specified, all aspects of each author in c are displayed.
 			Options for aspect: surname, given_name, birth_year, death_year.
