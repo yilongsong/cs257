@@ -8,7 +8,7 @@ Name
 SYNOPSIS
       python3 books.py -a csv_file_name search_text [aspect1] [aspect2] [aspect3] [aspect4]
       python3 books.py -b csv_file_name search_text sorted_by [aspect1] [aspect2] [aspect3]
-      python3 books.py -y csv_file_name begin_year end_year [aspect1] [aspect2] [aspect3]
+      python3 books.py -y csv_file_name start_year end_year [aspect1] [aspect2] [aspect3]
       python3 books.py -h
 
 DESCRIPTION
@@ -30,7 +30,7 @@ DESCRIPTION
 			Options for sorted_by: title, year.
 			Options for aspect: title, publication_year, authors.
 
-	-y, --year	Given csv_file_name c, begin_year a, end_year b, and aspect a1, a2, a3 (optional), 
+	-y, --year	Given csv_file_name c, start_year a, end_year b, and aspect a1, a2, a3 (optional), 
 			finds and displays informations about books from csv file c whose publication year y is 
 			such that a <= y <= b ('None' can be given in place of either a, b, or both; if a is 
 			'None', y <= b only; if b is 'None', a <= y only; if both are 'None', all books from c
