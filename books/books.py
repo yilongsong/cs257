@@ -36,9 +36,9 @@ def printResult(res, print_surname_bool, print_given_name_bool, print_birth_year
         if print_title_bool:
             s+=('Title: '+item.title+'  ')
         if print_publication_year_bool:
-            s+=('Publication year: '+str(book.publication_year)+'  ')
+            s+=('Publication year: '+str(item.publication_year)+'  ')
         if print_authors_bool:
-            s+='Authors'
+            s+='Author(s): '
             for author in item.authors:
                 s+=author.given_name
                 s+=' '
@@ -101,192 +101,68 @@ def main():
         printResult(res=res, print_surname_bool=print_surname_bool, print_given_name_bool=print_given_name_bool, print_birth_year_bool=print_birth_year_bool, print_death_year_bool=print_death_year_bool, print_title_bool=print_title_bool, print_publication_year_bool=print_publication_year_bool, print_authors_bool=print_authors_bool)
         
     elif args[1]=='-b' or args[1]=='--books':
-        aspect1 = 'None'
-        aspect2 = 'None'
-        aspect3 = 'None'
-        print(len(args))
-        if len(args)!=5:
-            if len(args)>=6:
-                aspect1 = args[5]
-            if len(args)>=7:
-                aspect2 = args[6]
-            if len(args)==8:
-                aspect3 = args[7]
-            if len(args)>8:
-                printArgsNumError()
-                
-        sorted_by = args[4]
+        if len(args)<5 or len(args)>8:
+            printArgsNumError()
         
-        if sorted_by!='title' and sorted_by!='year':
+        sort_by=args[4]
+        if sort_by!='title' and sort_by!='year':
             printUsageError()
+        
+        aspects=args[5:]
+        if len(aspects)==0:
+            print_title_bool=True
+            print_publication_year_bool=True
+            print_authors_bool=True
+        
+        for aspect in aspects:
+            if aspect=='title':
+                print_title_bool=True
+            elif aspect=='publication_year':
+                print_publication_year_bool=True
+            elif aspect=='authors':
+                print_authors_bool=True
+            else:
+                printUsageError()
+        
+        source=booksdatasource.BooksDataSource(csv_file_name)
+        res=source.books(search_text=search_text, sort_by=sort_by)
+        
+        printResult(res=res, print_surname_bool=print_surname_bool, print_given_name_bool=print_given_name_bool, print_birth_year_bool=print_birth_year_bool, print_death_year_bool=print_death_year_bool, print_title_bool=print_title_bool, print_publication_year_bool=print_publication_year_bool, print_authors_bool=print_authors_bool)
 
-        source = booksdatasource.BooksDataSource(csv_file_name)
-        res = source.books(search_text=search_text, sort_by=sorted_by)
-        
-        if aspect1=='None' and aspect2=='None' and aspect3=='None':
-            for book in res:
-                s='Title: '+book.title+'  Publication Year: '+str(book.publication_year)+'  Author(s): '
-                for author in book.authors:
-                    s+=author.given_name
-                    s+=' '
-                    s+=author.surname
-                    s+=', '
-                s=s[:-2]
-                print(s)
-        elif aspect1 in ['title', 'None'] and aspect2 in ['title', 'None'] and aspect3 in ['title', 'None']:
-            for book in res:
-                s='Title: '+book.title
-                print(s)
-        elif aspect1 in ['publication_year', 'None'] and aspect2 in ['publication_year', 'None'] and aspect3 in ['publication_year', 'None']:
-            for book in res:
-                s='Publication year: '+str(book.publication_year)
-                print(s)
-        elif aspect1 in ['authors', 'None'] and aspect2 in ['authors', 'None'] and aspect3 in ['authors', 'None']:
-            for book in res:
-                s='Author(s): '
-                for author in book.authors:
-                    s+=author.given_name
-                    s+=' '
-                    s+=author.surname
-                    s+=', '
-                s=s[:-2]
-                print(s)
-        elif aspect1 in ['authors', 'title', 'None'] and aspect2 in ['authors', 'title', 'None'] and aspect3 in ['authors', 'title', 'None']:
-            for book in res:
-                s='Title: '+book.title+'  Author(s): '
-                for author in book.authors:
-                    s+=author.given_name
-                    s+=' '
-                    s+=author.surname
-                    s+=', '
-                s=s[:-2]
-                print(s)
-        elif aspect1 in ['authors', 'publication_year', 'None'] and aspect2 in ['authors', 'publication_year', 'None'] and aspect3 in ['authors', 'publication_year', 'None']:
-            for book in res:
-                s='Publication year: '+str(book.publication_year)+'  Author(s): '
-                for author in book.authors:
-                    s+=author.given_name
-                    s+=' '
-                    s+=author.surname
-                    s+=', '
-                s=s[:-2]
-                print(s)
-        elif aspect1 in ['publication_year', 'title', 'None'] and aspect2 in ['publication_year', 'title', 'None'] and aspect3 in ['publication_year', 'title', 'None']:
-            for book in res:
-                s='Title: '+book.title+'  Publication year: '+str(book.publication_year)
-                print(s)
-        elif aspect1 in ['authors', 'publication_year', 'title', 'None'] and aspect2 in ['authors', 'publication_year', 'title', 'None'] and aspect3 in ['authors', 'publication_year', 'title', 'None']:
-            for book in res:
-                s='Title: '+book.title+'  Publication Year: '+str(book.publication_year)+'  Author(s): '
-                for author in book.authors:
-                    s+=author.given_name
-                    s+=' '
-                    s+=author.surname
-                    s+=', '
-                s=s[:-2]
-                print(s)
-        else:
-            printUsageError()
                     
     elif args[1]=='-y' or args[1]=='--year':
-        aspect1 = 'None'
-        aspect2 = 'None'
-        aspect3 = 'None'
-        start_year = None
-        end_year = None
-        print(len(args))
-        if len(args)!=5:
-            if len(args)>=6:
-                aspect1 = args[5]
-            if len(args)>=7:
-                aspect2 = args[6]
-            if len(args)==8:
-                aspect3 = args[7]
-            if len(args)>8:
-                printArgsNumError()
+        start_year=None
+        end_year=None
+        
+        if len(args)<5 or len(args)>8:
+            printArgsNumError()
         
         if args[3]!='None':
             start_year=int(args[3])
         if args[4]!='None':
             end_year=int(args[4])
-
-        source = booksdatasource.BooksDataSource(csv_file_name)
-        res = source.books_between_years(start_year=start_year, end_year=end_year)
         
-        if aspect1=='None' and aspect2=='None' and aspect3=='None':
-            for book in res:
-                s='Title: '+book.title+'  Publication Year: '+str(book.publication_year)+'  Author(s): '
-                for author in book.authors:
-                    s+=author.given_name
-                    s+=' '
-                    s+=author.surname
-                    s+=', '
-                s=s[:-2]
-                print(s)
-        elif aspect1 in ['title', 'None'] and aspect2 in ['title', 'None'] and aspect3 in ['title', 'None']:
-            for book in res:
-                s='Title: '+book.title
-                print(s)
-        elif aspect1 in ['publication_year', 'None'] and aspect2 in ['publication_year', 'None'] and aspect3 in ['publication_year', 'None']:
-            for book in res:
-                s='Publication year: '+str(book.publication_year)
-                print(s)
-        elif aspect1 in ['authors', 'None'] and aspect2 in ['authors', 'None'] and aspect3 in ['authors', 'None']:
-            for book in res:
-                s='Author(s): '
-                for author in book.authors:
-                    s+=author.given_name
-                    s+=' '
-                    s+=author.surname
-                    s+=', '
-                s=s[:-2]
-                print(s)
-        elif aspect1 in ['authors', 'title', 'None'] and aspect2 in ['authors', 'title', 'None'] and aspect3 in ['authors', 'title', 'None']:
-            for book in res:
-                s='Title: '+book.title+'  Author(s): '
-                for author in book.authors:
-                    s+=author.given_name
-                    s+=' '
-                    s+=author.surname
-                    s+=', '
-                s=s[:-2]
-                print(s)
-        elif aspect1 in ['authors', 'publication_year', 'None'] and aspect2 in ['authors', 'publication_year', 'None'] and aspect3 in ['authors', 'publication_year', 'None']:
-            for book in res:
-                s='Publication year: '+str(book.publication_year)+'  Author(s): '
-                for author in book.authors:
-                    s+=author.given_name
-                    s+=' '
-                    s+=author.surname
-                    s+=', '
-                s=s[:-2]
-                print(s)
-        elif aspect1 in ['publication_year', 'title', 'None'] and aspect2 in ['publication_year', 'title', 'None'] and aspect3 in ['publication_year', 'title', 'None']:
-            for book in res:
-                s='Title: '+book.title+'  Publication year: '+str(book.publication_year)
-                print(s)
-        elif aspect1 in ['authors', 'publication_year', 'title', 'None'] and aspect2 in ['authors', 'publication_year', 'title', 'None'] and aspect3 in ['authors', 'publication_year', 'title', 'None']:
-            for book in res:
-                s='Title: '+book.title+'  Publication Year: '+str(book.publication_year)+'  Author(s): '
-                for author in book.authors:
-                    s+=author.given_name
-                    s+=' '
-                    s+=author.surname
-                    s+=', '
-                s=s[:-2]
-                print(s)
-        else:
-            printUsageError()
+        aspects=args[5:]
+        if len(aspects)==0:
+            print_title_bool=True
+            print_publication_year_bool=True
+            print_authors_bool=True
         
-    elif args[1]=='-h' or args[1]=='--help':
-        file = open('usage.txt', 'r')
-        lines = file.readlines()
+        for aspect in aspects:
+            if aspect=='title':
+                print_title_bool=True
+            elif aspect=='publication_year':
+                print_publication_year_bool=True
+            elif aspect=='authors':
+                print_authors_bool=True
+            else:
+                printUsageError()
         
-        for line in lines:
-            print(line)
-    else:
-        printUsageError()
-    
+        source=booksdatasource.BooksDataSource(csv_file_name)
+        res=source.books_between_years(start_year=start_year, end_year=end_year)
+        
+        printResult(res=res, print_surname_bool=print_surname_bool, print_given_name_bool=print_given_name_bool, print_birth_year_bool=print_birth_year_bool, print_death_year_bool=print_death_year_bool, print_title_bool=print_title_bool, print_publication_year_bool=print_publication_year_bool, print_authors_bool=print_authors_bool)
+        
     
 if __name__ == "__main__":
     main()
