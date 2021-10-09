@@ -51,6 +51,8 @@ def printResult(res, print_surname_bool, print_given_name_bool, print_birth_year
 
 def main():
     args = sys.argv
+    
+    # Check args length
     if len(args)<2 or len(args)>8:
         printArgsNumError()
         
@@ -63,7 +65,7 @@ def main():
         if search_text=='None':
             search_text=None
         
-    # Options for aspects: surname, given_name, birth_year, death_year
+    # Options for aspects: surname, given_name, birth_year, death_year, title, publication_year, authors
     print_surname_bool=False
     print_given_name_bool=False
     print_birth_year_bool=False
@@ -77,7 +79,7 @@ def main():
             printArgsNumError()
         
         aspects=args[4:]
-        if len(aspects)==0:
+        if len(aspects)==0: # No aspect specified
             print_surname_bool=True
             print_given_name_bool=True
             print_birth_year_bool=True
@@ -100,7 +102,7 @@ def main():
         
         printResult(res=res, print_surname_bool=print_surname_bool, print_given_name_bool=print_given_name_bool, print_birth_year_bool=print_birth_year_bool, print_death_year_bool=print_death_year_bool, print_title_bool=print_title_bool, print_publication_year_bool=print_publication_year_bool, print_authors_bool=print_authors_bool)
         
-    elif args[1]=='-b' or args[1]=='--books':
+    elif args[1]=='-b' or args[1]=='--books': # Works in similar way as -a case
         if len(args)<5 or len(args)>8:
             printArgsNumError()
         
