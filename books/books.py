@@ -6,22 +6,22 @@
 
 import booksdatasource
 import sys
-
+#Function that throws error if the number of inputs are incorrect. 
 def printArgsNumError():
     print("Error: incorrect number of arguments for books.py")
     print("Enter command 'python3 books.py -h' for Usage Manual")
     exit()
-    
+#Function that throws an error if the terminal input is not a registered command
 def printUsageError():
     print("Error: incorrect command")
     print("Enter command 'python3 books.py -h' for Usage Manual")
     exit()
-    
+#Prints error message if the given file is incompatible    
 def printFileError():
     print("Error: csv_file_name must be a string ending with '.csv'")
     print("Enter command 'python3 books.py -h' for Usage Manual")
     exit()
-
+#Handels all the printings of the search aspects
 def printResult(res, print_surname_bool, print_given_name_bool, print_birth_year_bool, print_death_year_bool, print_title_bool, print_publication_year_bool, print_authors_bool):
     for item in res:
         s=''
@@ -48,7 +48,7 @@ def printResult(res, print_surname_bool, print_given_name_bool, print_birth_year
         s=s[:-2]
         print(s)
     
-
+#Imlementation of command interface using system args
 def main():
     args = sys.argv
     
@@ -84,7 +84,7 @@ def main():
             print_given_name_bool=True
             print_birth_year_bool=True
             print_death_year_bool=True
-            
+        #determine what to search by    
         for aspect in aspects:
             if aspect=='surname':
                 print_surname_bool=True
@@ -115,7 +115,7 @@ def main():
             print_title_bool=True
             print_publication_year_bool=True
             print_authors_bool=True
-        
+        #check for title, publication_year, and authors aspect
         for aspect in aspects:
             if aspect=='title':
                 print_title_bool=True
@@ -131,7 +131,7 @@ def main():
         
         printResult(res=res, print_surname_bool=print_surname_bool, print_given_name_bool=print_given_name_bool, print_birth_year_bool=print_birth_year_bool, print_death_year_bool=print_death_year_bool, print_title_bool=print_title_bool, print_publication_year_bool=print_publication_year_bool, print_authors_bool=print_authors_bool)
 
-                    
+    #check for specified year                
     elif args[1]=='-y' or args[1]=='--year':
         start_year=None
         end_year=None
