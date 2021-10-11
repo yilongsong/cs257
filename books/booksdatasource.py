@@ -40,6 +40,7 @@ class BooksDataSource:
         
         file = open(books_csv_file_name, 'r')
         reader = csv.reader(file)
+        
         for row in reader:
             # for construction of each book object
             book_title = row[0]
@@ -93,7 +94,7 @@ class BooksDataSource:
             by surname, breaking ties using given name (e.g. Ann Brontë comes before Charlotte Brontë).
         '''
         res = []
-        
+        #Search for author the is set by search parameter, or searches all the authors if parameter is None
         for author in self.authors_collection:
             if search_text==None or (search_text.lower() in author.surname.lower()) or (search_text.lower() in author.given_name.lower()):
                 res.append(author)
@@ -113,11 +114,11 @@ class BooksDataSource:
                             or 'title', just do the same thing you would do for 'title')
         '''
         res = []
-        
+        #Search for desired book
         for book in self.books_collection:
             if search_text==None or (search_text.lower() in book.title.lower()):
                 res.append(book)
-        
+        #Sort dependent on sort_by parameter
         if sort_by=='year':
             res.sort(key=lambda x: (x.publication_year, x.title))
         else:
@@ -136,7 +137,7 @@ class BooksDataSource:
             should be included.
         '''
         res = []
-        
+      
         for book in self.books_collection:
             if start_year==None and end_year==None:
                 res.append(book)
@@ -156,6 +157,7 @@ class BooksDataSource:
 
 
 def main():
+    #Implement test cases for the book database
     test = BooksDataSource('test.csv')
     testauthorlist = test.books(search_text='TH')
     for item in testauthorlist:
