@@ -23,7 +23,7 @@ def main():
     args = sys.argv
 
     try:
-        connection = psycopg2.connect(database='olympics', user='yilongsong', password='')
+        connection = psycopg2.connect(database=database, user=user, password=password)
     except Exception as e:
         print(e)
         exit()
