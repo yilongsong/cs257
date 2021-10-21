@@ -142,6 +142,7 @@ def main():
                         n+=1
 
             if write_file_name == 'athlete_event.csv': # Uses raw.csv and events.csv
+                m=1 # for id
                 dict_existence = {}
                 with open('events.csv', newline='') as events:
                     reader_events = csv.reader(events, delimiter=',')
@@ -161,19 +162,11 @@ def main():
                                 row_to_write.append(collection[str(line_raw[9:-1])])
                                 dict_existence[str(line_raw[1])+str(collection[str(line_raw[9:-1])])] = 0
                                 row_to_write.append(line_raw[-1])
-                                writer.writerow(row_to_write)
+                                writer.writerow([m]+row_to_write)
+                                m+=1
                             else:
                                 print("error")
                             
-                            '''for line_events in list_events:
-                                if line_events[1:] == line_raw[9:-1]:
-                                    print(line_raw)
-                                    print(line_events)
-                                    row_to_write.append(line_raw[1])
-                                    row_to_write.append(line_events[0])
-                                    row_to_write.append(line_raw[-1])
-                                    writer.writerow(row_to_write)
-                                    break'''
 
 
                         

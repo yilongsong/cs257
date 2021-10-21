@@ -28,8 +28,9 @@ CREATE TABLE events (
 );
 
 CREATE TABLE athlete_event (
+    id INT,
     athlete_id INT,
     event_id INT,
     medal TEXT,
-    PRIMARY KEY (athlete_id,event_id)
+    PRIMARY KEY (id)
 );
