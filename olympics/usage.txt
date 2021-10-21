@@ -1,0 +1,13 @@
+olympics.py Usage Manual
+AUTHOR
+    Yilong Song
+NAME
+    olympics.py
+SYNOPSIS and DESCRIPTION
+    python3 olympics.py -h|--help                         prints this usage statement
+    python3 olympics.py -an|--athletesnoc noc             given name of noc (string consisting of 3 capitalized letters),
+                                                          prints list of names of all the athletes from a specified NOC
+    python3 olympics.py -ng|--nocgold                     prints list of all the NOCs and the number of gold medals they 
+                                                          have won, in decreasing order of the number of gold medals
+    python3 olympics.py -am|--athletemedal athlete_name   given athlete_name (string), prints list of medals a given 
+                                                          athlete earned sorted by year earned
