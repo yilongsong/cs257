@@ -1,6 +1,8 @@
 '''
 olympics.py
 
+Yilong Song
+
 USAGE
 python3 olympics.py -h|--help                         prints a usage statement
 python3 olympics.py -an|--athletesnoc noc             prints list of names of all the athletes from a specified NOC
