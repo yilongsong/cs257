@@ -1,0 +1,23 @@
+AUTHORS
+Skyler Kessenich, Yilong Song
+
+DATASET DESCRIPTION
+1976-2020 US Senate Election Data: https://www.kaggle.com/aryakrishnanar/us-senatestate-level-election-19762020
+Dataset contains year of election, information about the constituency, electoral stage, name of candidate, party of candidate, number of votes for candidate, and total number of votes in election for every candidate-election pair.
+
+USER STORIES
+STORY: A presidential campaign manager can see previous senate election outcomes in a given state for a given election year. This will allow them to see political trends within states and show where they need to focus more on their resources.
+IMPLEMENTATION: The user will go to the homepage which contains two columns one has all 50 states and the other has a list of years from 1978-2020. Users can select all the states they want and all the years they want to view. For example, if a campaign manager selected Alabama and Florida and the years 2000 and 2020 it would show the data for Alabama 2000, Alabama 2020, Florida 2000 and Florida 2020. If no state is selected, it will show all the data from the given years selected and if no year is selected it will show all the years for each election in that state. 
+The data displayed after making these selections will be in a series of pie charts. For example, in the case of Alabama 2000, we would display a pie chart of the voter breakdown. Below that pie chart will be the candidate names followed by the votes they received and last there will be our prediction algorithm which makes predictions regarding who wins the state. This would allow the campaign manager to get specifics about the political orientation of a state and whether or not they need to spend time campaigning there. 
+
+STORY: A government worker tasked with evaluating whether or not the current senate voting method is “fair”. They can view different election outcomes for different voting methods and compare them to the actual outcome.
+IMPLEMENTATION: The government worker can select all the states they want and all the years they want to view. Upon doing this, they will be taken to the page with there requested data, where in the prediction box under each state they can look at one of our predetermined voting methods to see who we predict to win using that method. Our prediction box would then show the predicted winner which will allow the worker to choose a proper voting method.
+
+STORY: Someone tasked with predicting the outcome of the senate election for a given state in 2022 can see previous senate election numbers to help make an informed prediction of what party will win that state’s senate seats.
+IMPLEMENTATION: User will be able to access senate election information for a given state by selecting that state from the list of all states in the states column of the homepage, and selecting the years whose data they wish to access, and clicking a “go” button on the bottom from which they will be redirected to a different page. On that page, pie charts, each chart corresponding to a year, will be displayed in chronological order according to election year, with more information attached underneath each chart.
+
+STORY: A newspaper writer who is tasked with covering a specific senate race can look at our page to find data about previous years and compare them to the election they are writing about.
+MPLEMENTATION: We will implement two lists, one a list of all states and the other all years from 1976 to 2020, with boxes beside each item in each list that can be selected/ticked by the user to specify exactly data from which years and what years they wish to look at or compare, which ensures flexibility for the kind of user who may wish to look at any combination of years or states for their purposes, as specified in this story.
+
+STORY: A senator wants to pass a bill but needs more seats in his current party to pass may use this to see how likely it will be that a new senator in a rival senate seat will be replaced to see what time they should propose the bill.
+IMPLEMENTATION: The senator can look back at all the states previous years elections by selecting the most recent year. The page they will be taken to will have data (pie chart, data, and predictions) for all 50 senate elections in that most recent year and they can see which states were close and predict to see whether those states may flip in the next election.
