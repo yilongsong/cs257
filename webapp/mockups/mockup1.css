@@ -1,0 +1,74 @@
+/*
+    mockup1.css
+    Yilong Song, Skyler Kessenich
+    November 2, 2021
+*/
+
+h1 {
+    text-align: center;
+    font-size: 200%;
+}
+
+.subheader {
+    font-size: 150%;
+    font-weight: bold;
+    text-decoration: underline;
+    float: left;
+    width: 35%;
+}
+
+.leftcolumn {
+    font-size: 120%;
+    margin-left: 25%;
+    line-height: 120%;
+    float: left;
+    width: 22.5%;
+    height: 500px;
+}
+
+.middlecolumn{
+    font-size: 100%;
+    margin-left: 40%;
+    width: 32.5%;
+}
+
+.rightcolumn{
+    font-size: 120%;
+    margin-right: 15%;
+    float: right;
+    width: 15%;
+    height: 500px;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+ul.nobullets {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+button.go {
+    margin-left: 0%;
+    float: left;
+}
+
+a.button {
+    color: black;
+    text-decoration: none;
+}
+
+.checkbox {
+    float: right;
+}
+
+.direction {
+    margin-left: 25%;
+    margin-right: 30%;
+    font-size: 120%;
+    text-align: center;
+}
