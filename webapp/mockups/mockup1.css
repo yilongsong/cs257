@@ -17,7 +17,7 @@ h1 {
     width: 35%;
 }
 
-.leftcolumn {
+.left-column {
     font-size: 120%;
     margin-left: 25%;
     line-height: 120%;
@@ -26,13 +26,13 @@ h1 {
     height: 500px;
 }
 
-.middlecolumn{
+.middle-column{
     font-size: 100%;
     margin-left: 40%;
     width: 32.5%;
 }
 
-.rightcolumn{
+.right-column{
     font-size: 120%;
     margin-right: 15%;
     float: right;
@@ -46,14 +46,17 @@ h1 {
     clear: both;
 }
 
-ul.nobullets {
+ul.no-bullets {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
-button.go {
-    margin-left: 0%;
+p.search-button {
+    text-align: center;
+}
+
+p.go-button {
     float: left;
 }
 
@@ -63,7 +66,7 @@ a.button {
 }
 
 .checkbox {
-    float: right;
+    text-align: left;
 }
 
 .direction {
@@ -71,4 +74,12 @@ a.button {
     margin-right: 30%;
     font-size: 120%;
     text-align: center;
+}
+
+.searchbox {
+    text-align: center;
+}
+
+.input-text {
+    font-size:120%;
 }

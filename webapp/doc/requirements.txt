@@ -21,3 +21,7 @@ IMPLEMENTATION: We will implement two lists, one a list of all states and the ot
 
 STORY: A senator wants to pass a bill but needs more seats in his current party to pass may use this to see how likely it will be that a new senator in a rival senate seat will be replaced to see what time they should propose the bill.
 IMPLEMENTATION: The senator can look back at all the states previous years elections by selecting the most recent year. The page they will be taken to will have data (pie chart, data, and predictions) for all 50 senate elections in that most recent year and they can see which states were close and predict to see whether those states may flip in the next election.
+
+STORY: A history student is doing a research paper on a senator and wants to find data on how they have done in all the elections they have competed in.
+IMPLEMENTATION: Using our search bar in the top right corner, a user can search, a candidate, state, or year in which will give a summary page for that candidate, state, or year. On the candidate page, it will include every election year and state they competed in, the votes they received in that year, their party and how many terms they served if any. The state page will show the pie chars for every year there was an election in that state and the year page will show the pie chart for every state that held an election in that year. 
+
