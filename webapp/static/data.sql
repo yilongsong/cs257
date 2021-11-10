@@ -1,3 +1,6 @@
+-- AUTHORS:
+-- Yilong Song, Skyler Kessenich
+
 --
 -- PostgreSQL database dump
 --
