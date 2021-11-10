@@ -16,7 +16,8 @@ def home():
     return flask.render_template('index.html')
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser('A books-and-authors application, including API & DB')
+    parser = argparse.ArgumentParser('''A Senate election data displaying web
+                                     application, including API & DB''')
     parser.add_argument('host', help='the host to run on')
     parser.add_argument('port', type=int, help='the port to listen on')
     arguments = parser.parse_args()

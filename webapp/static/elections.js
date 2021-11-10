@@ -7,11 +7,10 @@
 window.onload = initialize;
 
 function initialize() {
-    loadAuthorsSelector();
 
-    let element = document.getElementById('author_selector');
+    let element = document.getElementById('search_button');
     if (element) {
-        element.onchange = onAuthorsSelectionChanged;
+        element.onclick = onCandidateSearchButtonPressed;
     }
 }
 
@@ -25,62 +24,56 @@ function getAPIBaseURL() {
     return baseURL;
 }
 
-function loadCandidateSearchBox() {
-    let url = getAPIBaseURL() + '/candidate/';
-
-    // Send the request to the books API /authors/ endpoint
-    fetch(url, {method: 'get'})
-
-    // When the results come back, transform them from a JSON string into
-    // a Javascript object (in this case, a list of author dictionaries).
-    .then((response) => response.json())
-
-    // Once you have your list of author dictionaries, use it to build
-    // an HTML table displaying the author names and lifespan.
-    .then(function(authors) {
-        // Add the <option> elements to the <select> element
-        let selectorBody = '';
-        for (let k = 0; k < authors.length; k++) {
-            let author = authors[k];
-            selectorBody += '<option value="' + author['id'] + '">'
-                                + author['surname'] + ', ' + author['given_name']
-                                + '</option>\n';
-        }
-
-        let selector = document.getElementById('author_selector');
-        if (selector) {
-            selector.innerHTML = selectorBody;
-        }
-    })
-
-    // Log the error if anything went wrong during the fetch.
-    .catch(function(error) {
-        console.log(error);
-    });
-}
-
-function onAuthorsSelectionChanged() {
-    let authorID = this.value; 
-    let url = getAPIBaseURL() + '/books/author/' + authorID;
+function onCandidateSearchButtonPressed() {
+    let searchString = document.getElementById('input_text').value
+    let url = getAPIBaseURL() + '/candidate/' + searchString;
 
     fetch(url, {method: 'get'})
 
     .then((response) => response.json())
 
-    .then(function(books) {
-        let tableBody = '';
-        for (let k = 0; k < books.length; k++) {
-            let book = books[k];
-            tableBody += '<tr>'
-                            + '<td>' + book['title'] + '</td>'
-                            + '<td>' + book['publication_year'] + '</td>'
-                            + '</tr>\n';
+    .then(function(candidateElectionHistory) {
+        let displayBody = '';
+        let startingYear = 0;
+        let startingCandidate = '';
+
+        // Deal with searches that yields no result
+        if (candidateElectionHistory.length == 0) {
+            displayBody += '<p class="display-candidate"> No candidate found!';
         }
+
+        for (let k = 0; k < candidateElectionHistory.length; k++) {
+            let election = candidateElectionHistory[k];
+            // For every separate candidate
+            if (election['candidate_name'] != startingCandidate) {
+                displayBody += '</p>' + '<h2>' + election['candidate_name'] + '</h2>';
+                startingCandidate= election['candidate_name']
+                startingYear = 0;
+            }
+
+            // For every separate election
+            if (election['year'] != startingYear) {
+                displayBody += '</p>' + '<p class="display-candidate">'
+                                + election['year'] + ' - '
+                                + election['state'] + ' - ' 
+                                + 'Party: ' + election['party'] + ' - '
+                                + 'Votes Received: ' + String(election['votes_received'])
+                                + '<br>' + 'Other candidates: ' + '<br>';
+                startingYear = election['year'];
+            }
+
+            // Handeling other candidates
+            displayBody += election['other_candidate_name'] 
+                            + ' - ' + 'Votes Received: ' 
+                            + String(election['other_candidate_votes_received']) + '<br>';
+        }
+
+        displayBody += '</p>'
 
         // Put the table body we just built inside the table that's already on the page.
-        let booksTable = document.getElementById('books_table');
-        if (booksTable) {
-            booksTable.innerHTML = tableBody;
+        let electionHistoryOnPage = document.getElementById('candidate_election_history');
+        if (electionHistoryOnPage) {
+            electionHistoryOnPage.innerHTML = displayBody;
         }
     })
 
