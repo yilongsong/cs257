@@ -28,6 +28,7 @@ def get_candidate_election_history(candidate_name):
                 ORDER BY c1.name, e1.year DESC;'''
 
     '''
+    For testing:
     SELECT DISTINCT c1.name, c1.party, e1.year, state.state, e1.votes_received,
         c2.name, e2.votes_received
     FROM candidate c1, candidate c2, election e1, election e2, state
@@ -35,7 +36,6 @@ def get_candidate_election_history(candidate_name):
         AND e1.year = e2.year AND e1.state_id = e2.state_id AND c2.id = e2.candidate_id
         AND c1.id != c2.id
     ORDER BY e1.year DESC;
-
     '''
 
     candidate_list = []
