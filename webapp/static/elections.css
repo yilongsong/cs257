@@ -1,5 +1,5 @@
 /*
-    mockup1.css
+    elections.css
     Yilong Song, Skyler Kessenich
     November 2, 2021
 */
@@ -14,12 +14,64 @@ h2 {
     font-size: 150%;
 }
 
+ul.horizontal-navbar {
+    list-style-type: none;
+    margin-left: 25%;
+    margin-right:25%;
+    padding: 0;
+    overflow: hidden;
+    background-color: #f1f1f1;
+}
+
+ul.horizontal-navbar li.search-by {
+    font-weight: bold;
+    padding: 14px 16px;
+    float: left;
+    text-align: center;
+    font-size: 120%;
+    width: 10%;
+}
+
+ul.horizontal-navbar li.functionality {
+    float: left;
+    font-size: 120%;
+}
+
+ul.horizontal-navbar li a {
+    padding: 14px 16px;
+    display: block;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+}
+
+ul.horizontal-navbar li a:hover {
+    cursor: pointer;
+    background-color: #555;
+    color: white;
+}
+
 p.display-candidate {
     font-size: 120%;
     margin-left: 35%; 
     margin-right: 35%;
 }
 
-.searchbox {
+p.state-drop-down {
+    margin-left: 40%;
+    width: 9%;
+    float: left;
+}
+
+p.year-drop-down {
+    width: 9%;
+    float: left;
+}
+
+p.go {
+    float:left;
+}
+
+.candidate-searchbox {
     text-align: center;
 }

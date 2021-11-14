@@ -5,7 +5,7 @@
         <title>Senate Election Data (1976-2020)</title>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='elections.css') }}" />
         <script type="text/javascript" src="{{ url_for('static', filename='elections.js') }}" ></script>
-        <!--<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />-->
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
     </head>
         
     <body>
@@ -15,14 +15,22 @@
             Select state(s) and year(s) then press "GO" to see data by state and year.<br> 
             Type candidate name in the search box then press "Search" to see election history of given candidate.
         </p>-->
-        
-        <div class="searchbox">
-            <input type="text" id="input_text" placeholder="Search by cadidate name">
-            <button><a class="button" id="search_button">SEARCH</a></button>
-        </div>
 
-        <div class="candidate">
-            <p id="candidate_election_history"></p>
+        <a></a>
+        <ul class="horizontal-navbar">
+            <li class="search-by">Search by:</li>
+            <li class="functionality"><a id="state-year">State & Year</a></li>
+            <li class="functionality"><a id="candidate">Candidate Name</a></li>
+        </ul>
+
+        <div class="state-year-drop-down" id="state-year-drop-down"></div>
+
+        <div class="pie-chart-data" id="pie-chart-data"></div>
+        
+        <div class="candidate-searchbox" id="candidate-searchbox"></div>
+
+        <div class="candidates">
+            <p id="candidate-election-history"></p>
         </div>
 
     </body>
