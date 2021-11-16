@@ -2,6 +2,9 @@
  * elections.js
  * Yilong Song, Skyler Kessenich
  * November 8, 2021
+ * 
+ * @api.route('/vote-total/?state=<state>&year=<year>/')
+ * @api.route('/election-results/for-candidate/<candidate_name>/')
  */
 
 window.onload = initialize;
@@ -16,6 +19,44 @@ function initialize() {
     }
 }
 
+// For changing between functionalities
+function deleteCandidateSearchElements() {
+    let candidateSearchbox = document.getElementById('candidate-searchbox')
+    if (candidateSearchbox) {
+        candidateSearchbox.innerHTML = '';
+    }
+    let candidatesData = document.getElementById('candidate-election-history')
+    if (candidatesData) {
+        candidatesData.innerHTML = '';
+    }
+}
+
+function deleteYearSearchElements() {;}
+
+function deleteStateSearchElements() {;}
+
+function deleteStateYearSearchElements() {
+    let dropDowns = document.getElementById('state-year-drop-down')
+    if (dropDowns) {
+        dropDowns.innerHTML = '';
+    }
+    let pieChartTitle = document.getElementById('pie-chart-title')
+    if (pieChartTitle) {
+        pieChartTitle.innerHTML = '';
+    }
+    let pieChart = document.getElementById('pie-chart')
+    if (pieChart) {
+        pieChart.innerHTML = '';
+    }
+}
+
+function deletePieChart() {
+    let pieChart = document.getElementById('pie-chart')
+    if (pieChart) {
+        pieChart.innerHTML = '';
+    }
+}
+
 // Returns the base URL of the API, onto which endpoint
 // components can be appended.
 function getAPIBaseURL() {
@@ -26,16 +67,13 @@ function getAPIBaseURL() {
     return baseURL;
 }
 
+// Search by State & Year
 function onSearchByStateYearButtonPressed() {
-    // Delete candidate search elements
-    let candidateSearchbox = document.getElementById('candidate-searchbox')
-    if (candidateSearchbox) {
-        candidateSearchbox.innerHTML = '';
-    }
-    let candidatesData = document.getElementById('candidate-election-history')
-    if (candidatesData) {
-        candidatesData.innerHTML = '';
-    }
+    // Delete other elements
+    deleteCandidateSearchElements();
+    deleteYearSearchElements();
+    deleteStateSearchElements();
+    deleteStateYearSearchElements();
 
     // Handle states
     let url = getAPIBaseURL()+ '/states/';
@@ -48,7 +86,7 @@ function onSearchByStateYearButtonPressed() {
                         '--SELECT STATE--' + '</option>\n';
         for (let i = 0; i < states.length; i++) {
             let state = states[i];
-            state_year_selector += '<option value="' + state['state_id'] + '">'
+            state_year_selector += '<option value="' + state['state_name'] + '">'
                             + state['state_name'] + '</option>\n';
         }
 
@@ -85,19 +123,65 @@ function onSearchByStateYearButtonPressed() {
 }
 
 function onStateYearSearchButtonPressed() {
-    ;
+    deleteCandidateSearchElements();
+    deleteYearSearchElements();
+    deleteStateSearchElements();
+    deletePieChart();
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        let state = document.getElementById('state_selector').value;
+        let year = document.getElementById('year_selector').value;
+        let url = getAPIBaseURL() + '/vote-total/state='+ state + '&year=' + String(year) + '/';
+        fetch(url, {method: 'get'})
+        .then((response) => response.json())
+        .then(function(pieChartData) {
+            let data = [];
+            data.push(['Candidate', 'Votes Received']);
+            for (let k = 0; k < pieChartData.length; k++) {
+                let candidate=pieChartData[k];
+                let entry = [candidate['candidate_name'], candidate['votes_received']];
+                data.push(entry);
+            }
+
+            let title = '<h2>% Votes Received for Candidates in ' + state + ' ' + year + '</h2>';
+            let pieChartTitle = document.getElementById('pie-chart-title');
+            if (pieChartTitle) {
+                pieChartTitle.innerHTML = title;
+            }
+
+            if (pieChartData.length == 0) {
+                if (pieChartTitle) {
+                    if (state=='0' && year==0) {
+                        pieChartTitle.innerHTML = '<p class="center">Please select a state and a year</p>';
+                    } else {
+                        pieChartTitle.innerHTML = '<p class="center">No Senate election occured for ' + state + ' in ' + year + '</p>';
+                    }
+                }
+            } else {
+                var googlePieChartData = google.visualization.arrayToDataTable(data);
+                var chart = new google.visualization.PieChart(document.getElementById('pie-chart'));
+                var options = {chartArea: {'left': 5, 'top': 5, 'right': 5},
+                legend: {'position': 'bottom'},
+                sliceVisibilityThreshold: .1};
+ 
+                chart.draw(googlePieChartData, options);
+            }
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+    }
 }
 
+// Search by Candidate
 function onSearchByCandidateButtonPressed() {
-    // Delete state year elements
-    let dropDowns = document.getElementById('state-year-drop-down')
-    if (dropDowns) {
-        dropDowns.innerHTML = '';
-    }
-    let pieChartData = document.getElementById('pie-chart-data')
-    if (pieChartData) {
-        pieChartData.innerHTML = '';
-    }
+    // Delete other elements
+    deleteYearSearchElements();
+    deleteStateSearchElements();
+    deleteStateYearSearchElements();
 
     let url = getAPIBaseURL() + '/search-by-candidate/';
     let searchBox = `<input type="text" id="input_text" placeholder="Search by cadidate name">
@@ -117,7 +201,7 @@ function onSearchByCandidateButtonPressed() {
 
 function onCandidateSearchButtonPressed() {
     let searchString = document.getElementById('input_text').value
-    let url = getAPIBaseURL() + '/candidate/' + searchString;
+    let url = getAPIBaseURL() + '/election-results/for-candidate/' + searchString;
 
     fetch(url, {method: 'get'})
 
@@ -130,7 +214,7 @@ function onCandidateSearchButtonPressed() {
 
         // Deal with searches that yields no result
         if (candidateElectionHistory.length == 0) {
-            displayBody += '<p class="display-candidate"> No candidate found!';
+            displayBody += '<p class="center"> No candidate found';
         }
 
         for (let k = 0; k < candidateElectionHistory.length; k++) {
@@ -172,3 +256,12 @@ function onCandidateSearchButtonPressed() {
     });
 }
 
+// Search by State
+function onSearchByStateButtonPressed() {}
+
+function onStateSearchButtonPressed() {}
+
+// Search by Year
+function onSearchByYearButtonPressed() {}
+
+function onYearSearchButtonPressed() {}

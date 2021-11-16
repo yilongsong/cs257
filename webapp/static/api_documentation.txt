@@ -1,0 +1,50 @@
+REQUEST: /states
+
+GET parameters:
+	None
+
+RESPONSE: a JSON list of dictionaries, each of which represents one state, sorted alphabetically by state name. The list contains all states. Each dictionary in this list will have the following fields:
+	state_id -- (INTEGER) Special identification of a state, starting with 1
+	state_name -- (TEXT) Name of a given state
+	state_po -- (TEXT) Postal abbreviation of a given state
+
+EXAMPLE(S):
+	/states
+	
+	
+	[{"state_id": 1, "state_name": "Alabama", "state_po": "AL"}, {"state_id": 2, "state_name": "Alaska", "state_po": "AK"}, ..., {"state_id": 56, "state_name": "Wyoming", "state_po": "WY"}]
+
+
+REQUEST: /election-results/for-candidate/<candidate_name>/
+
+GET parameters:
+	candidate_name -- return only candidates whose names contain candidate_name case insensitively
+
+RESPONSE: a JSON list of dictionaries, each of which represents a candidate-election pair. Each dictionary in this list will have the following fields:
+	candidate_name -- (TEXT) Name of candidate whose name contains <candidate_name>
+	party -- (TEXT) Name of the political party of said candidate in this particular election
+	year -- (INTEGER) Year of the election
+	state -- (TEXT) Name of the state in which this particular election took place
+	votes_received -- (INTEGER) Number of votes said candidate received in this particular election
+	other_candidate_name -- (TEXT) Name of another candidate who participated in this particular election
+	other_candidate_votes_received -- (INTEGER) Number of votes this other candidate received
+
+EXAMPLE(S):
+	/election-results/for-candidate/rash
+
+	[{"candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Christine O'Donnell", "other_candidate_votes_received": 123053}, {"candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Christopher A. Coons", "other_candidate_votes_received": 174012}, {"candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Glenn A. Miller", "other_candidate_votes_received": 8201}, {"candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Na", "other_candidate_votes_received": 10}, {"candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Na", "other_candidate_votes_received": 25}]
+
+
+REQUEST: /vote-total/state=<state>&year=<year>/
+
+GET parameters:
+	state -- return only data from this given state case insensitively
+	year -- return only data from this given year
+
+RESPONSES: a JSON list of dictionaries, each of which contains a candidate and the number of votes they had received in the specified election. Each dictionary in this list will have the following fields:
+	
+
+EXAMPLE(S):
+	/vote-total/state=minnesota&year=2020/
+
+	[{"candidate_id": 2160, "candidate_name": "Tina Smith", "votes_received": 1566522, "votes_total": 3214256}, {"candidate_id": 2333, "candidate_name": "Jason Lewis", "votes_received": 1398145, "votes_total": 3214256}, {"candidate_id": 2331, "candidate_name": "Kevin O'Connor", "votes_received": 190154, "votes_total": 3214256}, {"candidate_id": 2332, "candidate_name": "Oliver Steinberg", "votes_received": 57174, "votes_total": 3214256}, {"candidate_id": 2231, "candidate_name": "", "votes_received": 2261, "votes_total": 3214256}]

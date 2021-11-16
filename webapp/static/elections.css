@@ -29,7 +29,7 @@ ul.horizontal-navbar li.search-by {
     float: left;
     text-align: center;
     font-size: 120%;
-    width: 10%;
+    width: auto;
 }
 
 ul.horizontal-navbar li.functionality {
@@ -57,6 +57,12 @@ p.display-candidate {
     margin-right: 35%;
 }
 
+p.center {
+    text-align: center;
+    font-size: 120%;
+    font-weight: bold;
+}
+
 p.state-drop-down {
     margin-left: 40%;
     width: 9%;
@@ -74,4 +80,11 @@ p.go {
 
 .candidate-searchbox {
     text-align: center;
+}
+
+.pie-chart {
+    display: block;
+    margin: 0 auto;
+    width: 900px;
+    height: 400px;
 }

@@ -36,7 +36,7 @@ def get_states():
     
     return json.dumps(state_list)
 
-@api.route('/state-year/state=<state>/year=<year>/')
+@api.route('/vote-total/state=<state>&year=<year>/')
 def get_state_year_data(state, year):
     search_string_state = "'%" + state.upper()[1:-1] + "%'"
     search_string_year = year
@@ -65,8 +65,7 @@ def get_state_year_data(state, year):
     
     return json.dumps(candidate_list)
     
-
-@api.route('/candidate/<candidate_name>')
+@api.route('/election-results/for-candidate/<candidate_name>/')
 def get_candidate_election_history(candidate_name):
     search_string = '%' + candidate_name.upper() + '%'
     query = '''SELECT DISTINCT c1.name, c1.party, e1.year, state.state, e1.votes_received,
@@ -95,3 +94,9 @@ def get_candidate_election_history(candidate_name):
         print(e, file=sys.stderr)
 
     return json.dumps(candidate_list)
+
+@api.route('/help/')
+def get_api_help():
+    with open('static/api_documentation.txt', 'r') as f:
+        document = f.read()
+        return flask.Response(document, mimetype='text/plain')
