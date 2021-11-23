@@ -74,6 +74,12 @@ p.year-drop-down {
     float: left;
 }
 
+p.unique-drop-down {
+    margin-left: 44%;
+    width: 9%;
+    float: left;
+}
+
 p.go {
     float:left;
 }
@@ -82,9 +88,36 @@ p.go {
     text-align: center;
 }
 
+p.candidate-name-display {
+    margin-left: 45%;
+    margin-right: 25%;
+    font-size: 120%;
+}
+
+a.candidate-name {
+    text-decoration: underline;
+}
+
+.show-all {
+    margin-left: 45%;
+    font-size: 120%;
+    text-decoration: underline;
+    text-decoration-color: blue; 
+    color: blue;
+}
+
+p.back-button {
+    text-align: center;
+}
+
+a:hover {
+    cursor: pointer;
+}
+
 .pie-chart {
     display: block;
     margin: 0 auto;
     width: 900px;
     height: 400px;
 }
+

@@ -5,7 +5,7 @@
         <title>Senate Election Data (1976-2020)</title>
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='elections.css') }}" />
         <script type="text/javascript" src="{{ url_for('static', filename='elections.js') }}" ></script>
-        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+        <!--<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" />-->
         <!--<script src="https://cdn.anychart.com/releases/8.10.0/js/anychart-base.min.js"></script>-->
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
@@ -29,6 +29,7 @@
         </ul>
 
         <div class="state-year-drop-down" id="state-year-drop-down"></div>
+        <div class="unique-drop-down" id="unique-drop-down"></div>
 
         <div class="candidate-searchbox" id="candidate-searchbox"></div>
 
@@ -37,7 +38,10 @@
         </div>
 
         <br><br>
+        <div class="column-chart-title" id="column-chart-title"></div>
         <div class="pie-chart-title" id="pie-chart-title"></div>
+        <div class="column-chart" id="column-chart" align='center'></div>
+        <div class="column-chart-text" id="column-chart-text"></div>
         <div class="pie-chart" id="pie-chart"></div>
 
     </body>
