@@ -3,8 +3,6 @@
  * Yilong Song, Skyler Kessenich
  * November 8, 2021
  * 
- * @api.route('/vote-total/?state=<state>&year=<year>/')
- * @api.route('/election-results/for-candidate/<candidate_name>/')
  */
 
 window.onload = initialize;
