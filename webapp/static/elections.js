@@ -55,6 +55,10 @@ function deleteStateSearchElements() {
     if (columnChart) {
         columnChart.innerHTML = '';
     }
+    let columnChartText = document.getElementById('column-chart-text')
+    if (columnChartText) {
+        columnChartText.innerHTML = '';
+    }
 }
 
 function deleteStateYearSearchElements() {
@@ -250,16 +254,19 @@ function onCandidateSearchButtonPressed() {
         } else {
             // Display a list of candidates
             displayBody += '<p class="center">Click a candidate name to view their full election history</p>'
-            displayBody += '<p class="candidate-name-display">'
+            displayBody += `<table class="candidate-name-display">
+                            <tr><td class="bold-and-underline">Candidate Name</td>
+                            <td class="bold-and-underline">Party</td></tr>`
             for (let k = 0; k < candidateElectionHistory.length; k++) {
                 let election = candidateElectionHistory[k];
                 // For every separate candidate (first 50)
                 if (election['candidate_name'] != startingCandidate && candidateCount < 50) {
-                    displayBody += `<a class="candidate-name" id='` 
+                    displayBody += `<tr><td><a class="candidate-name" id='` 
                                     + election['candidate_name'] + `' value='` +
                                     election['candidate_name'] + `' onclick='onCandidateNameButtonPressed(&#39;` + 
                                     election['candidate_name'] + `&#39;)'>` +
-                                    election['candidate_name'] + `</a> <br>`;
+                                    election['candidate_name'] + `</a></td><td>` +
+                                    election['party'] + `</td>`;
                 }
                 // Keep counting past 50
                 if (election['candidate_name'] != startingCandidate) {
@@ -268,7 +275,7 @@ function onCandidateSearchButtonPressed() {
                     candidateCount++;
                 }
             }
-            displayBody += '</p>';
+            displayBody += '</table>'
             if (candidateCount >= 50) {
                 displayBody += '<p class="center">' + String(candidateCount) 
                             + ` candidates found. Displaying first 50. Enter more specified search
@@ -381,20 +388,23 @@ function onShowFullCandidateSearchResultButtonPressed() {
 
         // Display a list of candidates
         displayBody += '<p class="center">Click a candidate name to view their full election history</p>'
-        displayBody += '<p class="candidate-name-display">'
+        displayBody += `<table class="candidate-name-display">
+                        <tr><td class="bold-and-underline">Candidate Name</td>
+                        <td class="bold-and-underline">Party</td></tr>`
         for (let k = 0; k < candidateElectionHistory.length; k++) {
             let election = candidateElectionHistory[k];
             // For every separate candidate
             if (election['candidate_name'] != startingCandidate) {
-                displayBody += `<a class="candidate-name" id='` 
-                            + election['candidate_name'] + `' value='` +
-                            election['candidate_name'] + `' onclick='onCandidateNameButtonPressed(&#39;` + 
-                            election['candidate_name'] + `&#39;)'>` +
-                            election['candidate_name'] + `</a> <br>`;
+                displayBody += `<tr><td><a class="candidate-name" id='` 
+                + election['candidate_name'] + `' value='` +
+                election['candidate_name'] + `' onclick='onCandidateNameButtonPressed(&#39;` + 
+                election['candidate_name'] + `&#39;)'>` +
+                election['candidate_name'] + `</a></td><td>` +
+                election['party'] + `</td>`;
                 startingCandidate = election['candidate_name'];
             }
         }
-        displayBody += '</p>';
+        displayBody += '</table>';
 
         let electionHistoryOnPage = document.getElementById('candidate-election-history');
         if (electionHistoryOnPage) {
@@ -464,6 +474,7 @@ function onStateSearchButtonPressed() {
         .then((response) => response.json())
         .then(function(columnChartData) {
             let data = [];
+            let tableData = []
             data.push(['Year', 'Winner Votes Received', 'Runner-up Votes Received']);
             // In pairs
             for (let k = 0; k < columnChartData.length; k=k+2) {
@@ -471,11 +482,21 @@ function onStateSearchButtonPressed() {
                 let candidateNameParty1 = candidate1['candidate_name'] + ' (' + candidate1['candidate_party']
                                         + ')';
                 let candidate2 = columnChartData[k+1];
+                if (k+1 >= columnChartData.length) {
+                    candidate2 = {'candidate_name': '', 'votes_received': 0};
+                }
+
+                if (candidate1['year']==2021) {
+                    break;
+                }
                 let candidateNameParty2 = candidate2['candidate_name'] + ' (' + candidate2['candidate_party']
                                         + ')';
                 let entry = [String(candidate1['year']),
                              candidate1['votes_received'], candidate2['votes_received']];
                 data.push(entry);
+
+                let tableEntry = [String(candidate1['year']), candidateNameParty1, candidateNameParty2];
+                tableData.push(tableEntry);
             }
 
             var options = {
@@ -498,6 +519,31 @@ function onStateSearchButtonPressed() {
                 var googleColumnChartData = google.visualization.arrayToDataTable(data);
                 var chart = new google.charts.Bar(document.getElementById('column-chart'));
                 chart.draw(googleColumnChartData, google.charts.Bar.convertOptions(options))
+            }
+
+            displayBody = '<br><br><table class="column-chart-text">';
+            displayBody += '<tr>' + '<td class=bold-and-underline>Year:</td>';
+            for (i = 0; i < tableData.length; i++) {
+                displayBody +=  '<td>' + tableData[i][0] + '</td>';
+            }
+            displayBody += '</tr>';
+
+            displayBody += '<tr>' + '<td class=bold-and-underline>Winner:</td>';
+            for (i = 0; i < tableData.length; i++) {
+                displayBody +=  '<td>' + tableData[i][1] + '</td>';
+            }
+            displayBody += '</tr>';
+
+            displayBody += '<tr>' + '<td class=bold-and-underline>Runner-up:</td>';
+            for (i = 0; i < tableData.length; i++) {
+                displayBody +=  '<td>' + tableData[i][2] + '</td>';
+            }
+            displayBody += '</tr>';
+            displayBody += '</table>';
+
+            let columnChartHTML = document.getElementById('column-chart-text');
+            if (columnChartHTML) {
+                columnChartHTML.innerHTML = displayBody;
             }
         })
         .catch(function(error) {
@@ -538,4 +584,89 @@ function onSearchByYearButtonPressed() {
     }
 }
 
-function onYearSearchButtonPressed() {;}
+function onYearSearchButtonPressed() {
+    deleteCandidateSearchElements();
+    deleteStateYearSearchElements();
+    deletePieChart();
+
+    google.charts.load('current', {'packages':['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        let year = document.getElementById('year_selector').value;
+        let url = getAPIBaseURL() + '/election-results/for-year/' + String(year) + '/';
+        fetch(url, {method: 'get'})
+        .then((response) => response.json())
+        .then(function(columnChartData) {
+            let data = [];
+            let tableData = []
+            data.push(['State', 'Winner Votes Received', 'Runner-up Votes Received']);
+            // In pairs
+            for (let k = 0; k < columnChartData.length; k=k+2) {
+                let candidate1 = columnChartData[k];
+                let candidateNameParty1 = candidate1['candidate_name'] + ' (' + candidate1['candidate_party']
+                                        + ')';
+                let candidate2 = columnChartData[k+1];
+
+                if (candidate1['state'] != candidate2['state']) {
+                    k = k-1;
+                    continue;
+                }
+
+                if (k+1 >= columnChartData.length) {
+                    candidate2 = {'candidate_name': '', 'votes_received': 0};
+                }
+
+                let candidateNameParty2 = candidate2['candidate_name'] + ' (' + candidate2['candidate_party']
+                                        + ')';
+                let entry = [String(candidate1['state']),
+                             candidate1['votes_received'], candidate2['votes_received']];
+                data.push(entry);
+
+                let tableEntry = [String(candidate1['state']), candidateNameParty1, candidateNameParty2];
+                tableData.push(tableEntry);
+            }
+
+            var options = {
+                width: 1850,
+                height: 600
+              };
+      
+
+            let title = '<h2> Votes Received for Candidates in ' + String(year) + ' (All States where Election Occured)</h2>';
+            let columnChartTitle = document.getElementById('column-chart-title');
+            if (columnChartTitle) {
+                columnChartTitle.innerHTML = title;
+            }
+
+            if (columnChartData.length == 0) {
+                if (columnChartTitle) {
+                    columnChartTitle.innerHTML = '<p class="center">Please select a year</p>';
+                }
+            } else {
+                var googleColumnChartData = google.visualization.arrayToDataTable(data);
+                var chart = new google.charts.Bar(document.getElementById('column-chart'));
+                chart.draw(googleColumnChartData, google.charts.Bar.convertOptions(options))
+            }
+
+            displayBody = '<br><br><table class="column-chart-text-center">';
+            displayBody += `<tr><td class=bold-and-underline>State</td>
+                            <td class=bold-and-underline>Winner</td>
+                            <td class=bold-and-underline>Runner-up</td></tr>`;
+            for (i = 0; i < tableData.length; i++) {
+                displayBody +=  '<tr>' + '<td>' + tableData[i][0] + '</td>' +
+                                '<td>' + tableData[i][1] + '</td>' +
+                                '<td>' + tableData[i][2] + '</td>' + '</tr>';
+            }
+            displayBody += '</table>';
+
+            let columnChartHTML = document.getElementById('column-chart-text');
+            if (columnChartHTML) {
+                columnChartHTML.innerHTML = displayBody;
+            }
+        })
+        .catch(function(error) {
+            console.log(error);
+        });
+    }
+}

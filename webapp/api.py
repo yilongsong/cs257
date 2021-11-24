@@ -39,7 +39,7 @@ def get_states():
 @api.route('/vote-total/state=<state>&year=<year>/')
 def get_state_year_data(state, year):
     search_string_state = "'%" + state.upper()[1:-1] + "%'"
-    search_string_year = year
+    search_string_year = str(int(year))
     query = '''SELECT candidate.id, candidate.name, candidate.party, election.votes_received,
                 election.votes_total
                 FROM candidate, election, state
@@ -136,7 +136,7 @@ def get_state_election_history(state):
         connection = get_connection()
         cursor = connection.cursor()
         cursor.execute(query, (search_string,))
-        current_year = 0 # To only get top two candidates per eleciton year
+        current_year = 0 # To only get top two candidates per election year
         for row in cursor:
             if current_year != row[3]:
                 current_year = row[3]
@@ -160,7 +160,42 @@ def get_state_election_history(state):
     return json.dumps(election_year_list)
 
 
-@api.route('/election-results/for-year/<year>')
+@api.route('/election-results/for-year/<year>/')
+def get_year_election_history(year):
+    search_string = str(int(year))
+    query = '''SELECT candidate.name, candidate.party, election.votes_received, state.state
+                FROM candidate, election, state
+                WHERE candidate.id = election.candidate_id AND election.state_id = state.id
+                    AND election.year = %s
+                ORDER BY state.state ASC, election.votes_received DESC;
+            '''
+    election_year_list = []
+    try:
+        connection = get_connection()
+        cursor = connection.cursor()
+        cursor.execute(query, (search_string,))
+        current_state = '' # To only get top two candidates per state
+        for row in cursor:
+            if current_state != row[3]:
+                current_state = row[3]
+                candidate_count = 0
+            
+            if candidate_count == 2:
+                continue
+
+            if candidate_count < 2:
+                election_year = {'candidate_name':row[0].lower().title(),
+                                'candidate_party':row[1].lower().title(),
+                                'votes_received':row[2], 'state':row[3].lower().title()}
+                election_year_list.append(election_year)
+                candidate_count += 1
+        cursor.close()
+        connection.close()
+    
+    except Exception as e:
+        print(e, file=sys.stderr)
+
+    return json.dumps(election_year_list)
 
 @api.route('/help/')
 def get_api_help():

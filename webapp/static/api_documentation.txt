@@ -1,4 +1,4 @@
-REQUEST: /states
+REQUEST: /states/
 
 GET parameters:
 	None
@@ -9,30 +9,10 @@ RESPONSE: a JSON list of dictionaries, each of which represents one state, sorte
 	state_po -- (TEXT) Postal abbreviation of a given state
 
 EXAMPLE(S):
-	/states
+	/states/
 	
 	
 	[{"state_id": 1, "state_name": "Alabama", "state_po": "AL"}, {"state_id": 2, "state_name": "Alaska", "state_po": "AK"}, ..., {"state_id": 56, "state_name": "Wyoming", "state_po": "WY"}]
-
-
-REQUEST: /election-results/for-candidate/<candidate_name>/
-
-GET parameters:
-	candidate_name -- return only candidates whose names contain candidate_name case insensitively
-
-RESPONSE: a JSON list of dictionaries, each of which represents a candidate-election pair. Each dictionary in this list will have the following fields:
-	candidate_name -- (TEXT) Name of candidate whose name contains <candidate_name>
-	party -- (TEXT) Name of the political party of said candidate in this particular election
-	year -- (INTEGER) Year of the election
-	state -- (TEXT) Name of the state in which this particular election took place
-	votes_received -- (INTEGER) Number of votes said candidate received in this particular election
-	other_candidate_name -- (TEXT) Name of another candidate who participated in this particular election
-	other_candidate_votes_received -- (INTEGER) Number of votes this other candidate received
-
-EXAMPLE(S):
-	/election-results/for-candidate/rash
-
-	[{"candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Christine O'Donnell", "other_candidate_votes_received": 123053}, {"candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Christopher A. Coons", "other_candidate_votes_received": 174012}, {"candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Glenn A. Miller", "other_candidate_votes_received": 8201}, {"candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Na", "other_candidate_votes_received": 10}, {"candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Na", "other_candidate_votes_received": 25}]
 
 
 REQUEST: /vote-total/state=<state>&year=<year>/
@@ -42,9 +22,71 @@ GET parameters:
 	year -- return only data from this given year
 
 RESPONSES: a JSON list of dictionaries, each of which contains a candidate and the number of votes they had received in the specified election. Each dictionary in this list will have the following fields:
-	
+	candidate_id -- (INTEGER) Special identification of a candidate who participated in this election
+	candidate_name -- (TEXT) Name of a candidate who participated in this election
+	candidate_party -- (TEXT) Name of the political party of said candidate
+	votes_received -- (INTEGER) Number of votes said candidate received in this election
+	votes_total -- (INTEGER) Total number of votes casted in said election
 
 EXAMPLE(S):
 	/vote-total/state=minnesota&year=2020/
 
-	[{"candidate_id": 2160, "candidate_name": "Tina Smith", "votes_received": 1566522, "votes_total": 3214256}, {"candidate_id": 2333, "candidate_name": "Jason Lewis", "votes_received": 1398145, "votes_total": 3214256}, {"candidate_id": 2331, "candidate_name": "Kevin O'Connor", "votes_received": 190154, "votes_total": 3214256}, {"candidate_id": 2332, "candidate_name": "Oliver Steinberg", "votes_received": 57174, "votes_total": 3214256}, {"candidate_id": 2231, "candidate_name": "", "votes_received": 2261, "votes_total": 3214256}]
+	[{"candidate_id": 2160, "candidate_name": "Tina Smith", "candidate_party": "Democratic-Farmer-Labor", "votes_received": 1566522, "votes_total": 3214256}, {"candidate_id": 2333, "candidate_name": "Jason Lewis", "candidate_party": "Republican", "votes_received": 1398145, "votes_total": 3214256}, {"candidate_id": 2331, "candidate_name": "Kevin O'Connor", "candidate_party": "Legal Marijuana Now", "votes_received": 190154, "votes_total": 3214256}, {"candidate_id": 2332, "candidate_name": "Oliver Steinberg", "candidate_party": "Grassroots", "votes_received": 57174, "votes_total": 3214256}, {"candidate_id": 2231, "candidate_name": "", "candidate_party": "Na", "votes_received": 2261, "votes_total": 3214256}]
+
+
+REQUEST: /election-results/for-candidate/<candidate_name>/
+
+GET parameters:
+	candidate_name -- return only candidates whose names contain candidate_name case insensitively
+
+RESPONSE: a JSON list of dictionaries, each of which represents a candidate-election pair. Each dictionary in this list will have the following fields:
+	candidate_id -- (INTEGER) Special identification of a candidate whose name contains <candidate_name>
+	candidate_name -- (TEXT) Name of candidate whose name contains <candidate_name>
+	party -- (TEXT) Name of the political party of said candidate in this particular election
+	year -- (INTEGER) Year of the election
+	state -- (TEXT) Name of the state in which this particular election took place
+	votes_received -- (INTEGER) Number of votes said candidate received in this particular election
+	other_candidate_name -- (TEXT) Name of another candidate who participated in this particular election
+	other_candidate_votes_received -- (INTEGER) Number of votes this other candidate received
+
+EXAMPLE(S):
+	/election-results/for-candidate/rash/
+
+	[{"candidate_id": 1703, "candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Christine O'Donnell", "other_candidate_votes_received": 123053, "win_lose": "Lose"}, {"candidate_id": 1703, "candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Christopher A. Coons", "other_candidate_votes_received": 174012}, {"candidate_id": 1703, "candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Glenn A. Miller", "other_candidate_votes_received": 8201}, {"candidate_id": 1703, "candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Na", "other_candidate_votes_received": 10}, {"candidate_id": 1703, "candidate_name": "James W. Rash", "party": "Libertarian", "year": 2010, "state": "Delaware", "votes_received": 2101, "other_candidate_name": "Na", "other_candidate_votes_received": 25}]
+
+
+REQUEST: /election-results/for-state/<state>/
+
+GET parameters:
+	state -- return only Senate elections occurred in the state whose name contains <state>.
+
+RESPONSE: a JSON list of dictionaries, each of which represents a candidate's election result in a specific election occurred in given state. Each dictionary in this list will have the following fields:
+	candidate_name -- (TEXT) Name of top two candidates each election year in given state
+	candidate_party -- (TEXT) Name of the political party of said candidate
+	votes_received -- (INTEGER) Votes received by said candidate in corresponding election
+	year -- (INTEGER) Year in which said election occurred
+
+EXAMPLES(s):
+	/election-results/for-state/minnesota/
+
+	[{"candidate_name": "Hubert H. Humphrey", "candidate_party": "Democrat", "votes_received": 1290736, "year": 1976}, {"candidate_name": "Jerry Brekke", "candidate_party": "Republican", "votes_received": 478602, "year": 1976}, {"candidate_name": "David Durenberger", "candidate_party": "Republican", "votes_received": 957908, "year": 1978}, {"candidate_name": "Rudolph E. Boschwitz", "candidate_party": "Republican", "votes_received": 894092, "year": 1978}, {"candidate_name": "Dave Durenberger", "candidate_party": "Republican", "votes_received": 949207, "year": 1982}, {"candidate_name": "Mark Dayton", "candidate_party": "Democrat", "votes_received": 840401, "year": 1982}, {"candidate_name": "Rudy Boschwitz", "candidate_party": "Republican", "votes_received": 1199926, "year": 1984}, {"candidate_name": "Joan Anderson Growe", "candidate_party": "Democrat", "votes_received": 852844, "year": 1984}, {"candidate_name": "Dave Durenberger", "candidate_party": "Republican", "votes_received": 1176210, "year": 1988}, {"candidate_name": "Hubert H. \"Skip\" Humphrey Iii", "candidate_party": "Democratic-Farmer-Labor", "votes_received": 856694, "year": 1988}, {"candidate_name": "Paul David Wellstone", "candidate_party": "Democrat", "votes_received": 911999, "year": 1990}, {"candidate_name": "Rudy Boschwitz", "candidate_party": "Republican", "votes_received": 864375, "year": 1990}, {"candidate_name": "Rod Grams", "candidate_party": "Republican", "votes_received": 869653, "year": 1994}, {"candidate_name": "Ann Wynia", "candidate_party": "Democratic-Farmer-Labor", "votes_received": 781860, "year": 1994}, {"candidate_name": "Paul Wellstone", "candidate_party": "Democratic-Farmer-Labor", "votes_received": 1098430, "year": 1996}, {"candidate_name": "Rudy Boschwitz", "candidate_party": "Republican", "votes_received": 901194, "year": 1996}, {"candidate_name": "Mark Dayton", "candidate_party": "Democrat", "votes_received": 1181553, "year": 2000}, {"candidate_name": "Rod Grams", "candidate_party": "Republican", "votes_received": 1047474, "year": 2000}, {"candidate_name": "Norm Coleman", "candidate_party": "Republican", "votes_received": 1116697, "year": 2002}, {"candidate_name": "Walter F. Mondale", "candidate_party": "Democrat", "votes_received": 1067246, "year": 2002}, {"candidate_name": "Amy Klobuchar", "candidate_party": "Democratic-Farmer-Labor", "votes_received": 1278849, "year": 2006}, {"candidate_name": "Mark R. Kennedy", "candidate_party": "Republican", "votes_received": 835653, "year": 2006}, {"candidate_name": "Al Franken", "candidate_party": "Democrat", "votes_received": 1212629, "year": 2008}, {"candidate_name": "Norm Coleman", "candidate_party": "Republican", "votes_received": 1212317, "year": 2008}, {"candidate_name": "Amy Klobuchar", "candidate_party": "Democratic-Farmer-Labor", "votes_received": 1854595, "year": 2012}, {"candidate_name": "Kurt Bills", "candidate_party": "Republican", "votes_received": 867974, "year": 2012}, {"candidate_name": "Al Franken", "candidate_party": "Democrat", "votes_received": 1053205, "year": 2014}, {"candidate_name": "Mike Mcfadden", "candidate_party": "Republican", "votes_received": 850227, "year": 2014}, {"candidate_name": "Amy Klobuchar", "candidate_party": "Democratic-Farmer-Labor", "votes_received": 1566174, "year": 2018}, {"candidate_name": "Tina Smith", "candidate_party": "Democratic-Farmer-Labor", "votes_received": 1370540, "year": 2018}, {"candidate_name": "Tina Smith", "candidate_party": "Democratic-Farmer-Labor", "votes_received": 1566522, "year": 2020}, {"candidate_name": "Jason Lewis", "candidate_party": "Republican", "votes_received": 1398145, "year": 2020}]
+
+
+REQUEST: /election-results/for-year/<year>/
+
+GET parameters:
+	year -- return only Senate elections occurred in given <year>.
+
+RESPONSE: a JSON list of dictionaries, each of which represents a candidate's election result in a specific election occurred in given year. Each dictionary in this list will have the following fields:
+	candidate_name -- (TEXT) Name of top two candidates each state in given year
+	candidate_party -- (TEXT) Name of the political party of said candidate
+	votes_received -- (INTEGER) Votes received by said candidate in corresponding election
+	state -- (INTEGER) State in which said election occurred
+
+EXAMPLE(s):
+	/election-results/for-year/2020/
+
+	[{"candidate_name": "Tommy Tuberville", "candidate_party": "Republican", "votes_received": 1392076, "state": "Alabama"}, {"candidate_name": "Doug Jones", "candidate_party": "Democrat", "votes_received": 920478, "state": "Alabama"}, {"candidate_name": "Dan Sullivan", "candidate_party": "Republican", "votes_received": 191112, "state": "Alaska"}, {"candidate_name": "Al Gross", "candidate_party": "Democrat", "votes_received": 146068, "state": "Alaska"}, {"candidate_name": "Mark Kelly", "candidate_party": "Democrat", "votes_received": 1716467, "state": "Arizona"}, {"candidate_name": "Martha Mcsally", "candidate_party": "Republican", "votes_received": 1637661, "state": "Arizona"}, {"candidate_name": "Tom Cotton", "candidate_party": "Republican", "votes_received": 793871, "state": "Arkansas"}, {"candidate_name": "Ricky Dale Harrington Jr.", "candidate_party": "Libertarian", "votes_received": 399390, "state": "Arkansas"}, {"candidate_name": "John W. Hickenlooper", "candidate_party": "Democrat", "votes_received": 1731114, "state": "Colorado"}, {"candidate_name": "Cory Gardner", "candidate_party": "Republican", "votes_received": 1429492, "state": "Colorado"}, {"candidate_name": "Christopher A. Coons", "candidate_party": "Democrat", "votes_received": 291804, "state": "Delaware"}, {"candidate_name": "Lauren Witzke", "candidate_party": "Republican", "votes_received": 186054, "state": "Delaware"}, {"candidate_name": "David A. Perdue", "candidate_party": "Republican", "votes_received": 2462617, "state": "Georgia"}, {"candidate_name": "Jon Ossoff", "candidate_party": "Democrat", "votes_received": 2374519, "state": "Georgia"}, {"candidate_name": "Jim Risch", "candidate_party": "Republican", "votes_received": 538446, "state": "Idaho"}, {"candidate_name": "Paulette Jordan", "candidate_party": "Democrat", "votes_received": 285864, "state": "Idaho"}, {"candidate_name": "Richard J. Durbin", "candidate_party": "Democrat", "votes_received": 3278930, "state": "Illinois"}, {"candidate_name": "Mark C. Curran Jr.", "candidate_party": "Republican", "votes_received": 2319870, "state": "Illinois"}, {"candidate_name": "Joni Ernst", "candidate_party": "Republican", "votes_received": 864997, "state": "Iowa"}, {"candidate_name": "Theresa Greenfield", "candidate_party": "Democrat", "votes_received": 754859, "state": "Iowa"}, {"candidate_name": "Roger Marshall", "candidate_party": "Republican", "votes_received": 727962, "state": "Kansas"}, {"candidate_name": "Barbara Bollier", "candidate_party": "Democrat", "votes_received": 571530, "state": "Kansas"}, {"candidate_name": "Mitch Mcconnell", "candidate_party": "Democrat", "votes_received": 1233315, "state": "Kentucky"}, {"candidate_name": "Amy Mcgrath", "candidate_party": "Democrat", "votes_received": 816257, "state": "Kentucky"}, {"candidate_name": "\"Bill\" Cassidy", "candidate_party": "Republican", "votes_received": 1228908, "state": "Louisiana"}, {"candidate_name": "Adrian Perkins", "candidate_party": "Democrat", "votes_received": 394049, "state": "Louisiana"}, {"candidate_name": "Susan Margaret Collins", "candidate_party": "Republican", "votes_received": 417645, "state": "Maine"}, {"candidate_name": "Sara I. Gideon", "candidate_party": "Democrat", "votes_received": 347223, "state": "Maine"}, {"candidate_name": "Edward J. Markey", "candidate_party": "Democrat", "votes_received": 2357809, "state": "Massachusetts"}, {"candidate_name": "Kevin J. O'Conner", "candidate_party": "Republican", "votes_received": 1177765, "state": "Massachusetts"}, {"candidate_name": "Gary Peters", "candidate_party": "Democrat", "votes_received": 2734568, "state": "Michigan"}, {"candidate_name": "John James", "candidate_party": "Republican", "votes_received": 2642233, "state": "Michigan"}, {"candidate_name": "Tina Smith", "candidate_party": "Democratic-Farmer-Labor", "votes_received": 1566522, "state": "Minnesota"}, {"candidate_name": "Jason Lewis", "candidate_party": "Republican", "votes_received": 1398145, "state": "Minnesota"}, {"candidate_name": "Cindy Hyde-Smith", "candidate_party": "Republican", "votes_received": 709511, "state": "Mississippi"}, {"candidate_name": "Mike Espy", "candidate_party": "Democrat", "votes_received": 578691, "state": "Mississippi"}, {"candidate_name": "Steve Daines", "candidate_party": "Republican", "votes_received": 333174, "state": "Montana"}, {"candidate_name": "Steve Bullock", "candidate_party": "Democrat", "votes_received": 272463, "state": "Montana"}, {"candidate_name": "Ben Sasse", "candidate_party": "Republican", "votes_received": 583507, "state": "Nebraska"}, {"candidate_name": "Chris Janicek", "candidate_party": "Democrat", "votes_received": 227191, "state": "Nebraska"}, {"candidate_name": "Jeanne Shaheen", "candidate_party": "Democrat", "votes_received": 450778, "state": "New Hampshire"}, {"candidate_name": "Corky Messner", "candidate_party": "Republican", "votes_received": 326229, "state": "New Hampshire"}, {"candidate_name": "Cory Booker", "candidate_party": "Democrat", "votes_received": 2541178, "state": "New Jersey"}, {"candidate_name": "Rikin \"Rik\" Mehta", "candidate_party": "Republican", "votes_received": 1817052, "state": "New Jersey"}, {"candidate_name": "Ben R. Lujan", "candidate_party": "Democrat", "votes_received": 474483, "state": "New Mexico"}, {"candidate_name": "Mark V. Ronchetti", "candidate_party": "Republican", "votes_received": 418483, "state": "New Mexico"}, {"candidate_name": "Thom Tillis", "candidate_party": "Republican", "votes_received": 2665598, "state": "North Carolina"}, {"candidate_name": "Cal Cunningham", "candidate_party": "Democrat", "votes_received": 2569965, "state": "North Carolina"}, {"candidate_name": "Jim Inhofe ", "candidate_party": "Republican", "votes_received": 979140, "state": "Oklahoma"}, {"candidate_name": "Abby Broyles", "candidate_party": "Democrat", "votes_received": 509763, "state": "Oklahoma"}, {"candidate_name": "Jeff Merkley", "candidate_party": "Democrat", "votes_received": 1321047, "state": "Oregon"}, {"candidate_name": "Jo Rae Perkins", "candidate_party": "Republican", "votes_received": 912814, "state": "Oregon"}, {"candidate_name": "John F. Reed", "candidate_party": "Democrat", "votes_received": 328574, "state": "Rhode Island"}, {"candidate_name": "Allen R. Waters", "candidate_party": "Republican", "votes_received": 164855, "state": "Rhode Island"}, {"candidate_name": "Lindsey Graham", "candidate_party": "Republican", "votes_received": 1369137, "state": "South Carolina"}, {"candidate_name": "Jaime Harrison", "candidate_party": "Democrat", "votes_received": 1110828, "state": "South Carolina"}, {"candidate_name": "Mike Rounds", "candidate_party": "Republican", "votes_received": 276232, "state": "South Dakota"}, {"candidate_name": "Dan Ahlers", "candidate_party": "Democrat", "votes_received": 143987, "state": "South Dakota"}, {"candidate_name": "Bill Hagerty", "candidate_party": "Republican", "votes_received": 1840926, "state": "Tennessee"}, {"candidate_name": "Marquita Bradshaw", "candidate_party": "Democrat", "votes_received": 1040691, "state": "Tennessee"}, {"candidate_name": "John Cornyn", "candidate_party": "Republican", "votes_received": 5962983, "state": "Texas"}, {"candidate_name": "Mary \"Mj\" Hegar", "candidate_party": "Democrat", "votes_received": 4888764, "state": "Texas"}, {"candidate_name": "Mark R. Warner", "candidate_party": "Democrat", "votes_received": 2466500, "state": "Virginia"}, {"candidate_name": "Daniel M. Gade", "candidate_party": "Republican", "votes_received": 1934199, "state": "Virginia"}, {"candidate_name": "Shelley Moore Capito", "candidate_party": "Republican", "votes_received": 547454, "state": "West Virginia"}, {"candidate_name": "Paula Jean Swearengin", "candidate_party": "Democrat", "votes_received": 210309, "state": "West Virginia"}, {"candidate_name": "Cynthia M. Lummis", "candidate_party": "Na", "votes_received": 198100, "state": "Wyoming"}, {"candidate_name": "Merav Ben David", "candidate_party": "Na", "votes_received": 72766, "state": "Wyoming"}]
+
+	
+	

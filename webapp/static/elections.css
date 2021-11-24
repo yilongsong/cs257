@@ -88,14 +88,24 @@ p.go {
     text-align: center;
 }
 
-p.candidate-name-display {
-    margin-left: 45%;
+.candidate-name-display {
+    margin-left: 40%;
     margin-right: 25%;
     font-size: 120%;
+    width: 25%;
 }
 
 a.candidate-name {
     text-decoration: underline;
+}
+
+table.column-chart-text {
+    margin-left: 15%;
+    margin-right: 25%;
+}
+
+table.column-chart-text-center {
+    margin-left: 35%;
 }
 
 .show-all {
@@ -121,3 +131,7 @@ a:hover {
     height: 400px;
 }
 
+.bold-and-underline {
+    font-weight: bold;
+    text-decoration: underline;
+}
